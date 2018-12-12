@@ -6,9 +6,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 
+import java.io.PrintWriter;
+
 public class MenuButtons extends AbstractStage{
 
-    MenuButtons() {
+    MenuButtons( ) {
         vbButtons.getChildren().add(btnForTwoPlayers());
         vbButtons.getChildren().add(btnForThreePlayers());
         vbButtons.getChildren().add(btnForFourPlayers());
@@ -22,7 +24,7 @@ public class MenuButtons extends AbstractStage{
 
 
 
-    Button btnForTwoPlayers() {
+    Button btnForTwoPlayers( ) {
         Button btn = new Button ("2 players");
         //btn.setStyle("-fx-background-color: gray; ");
 

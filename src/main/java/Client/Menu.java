@@ -9,16 +9,22 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+
 public class Menu extends AbstractStage {
 
 
     public Menu(Stage primaryStage) {
 
+
+
         MenuButtons btns = new MenuButtons();
 
         scene.setFill(Color.BLACK);
 
-        primaryStage.setTitle("CipaPizda2137");
+        primaryStage.setTitle("TrylmaAlpha");
         primaryStage.setScene(scene);
         primaryStage.show();
 
