@@ -4,86 +4,45 @@ import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ClientHandler extends Thread {
 
     DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
     DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
-    final DataInputStream dis;
-    final DataOutputStream dos;
+    final DataInputStream in;
+    final DataOutputStream out;
     final Socket s;
     String nick;
 
 
     // Constructor
-    public ClientHandler(Socket s, DataInputStream dis, DataOutputStream dos, String nick)
+    public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname)
     {
         this.s = s;
-        this.dis = dis;
-        this.dos = dos;
-        this.nick=nick;
+        this.in = in;
+        this.out = out;
+        this.nick=nickname;
     }
 
     @Override
     public void run()
     {
-        String received;
-        String toreturn;
-        while (true)
-        {
-            try {
+        String input ="";
+        try { input = in.readUTF();} catch(Exception ex) {}
 
-                // Ask user what he wants
-                dos.writeUTF("What do you want, mr "+ nick + "?[Date | Time]..\n"+
-                        "Type Exit to terminate connection.");
+        if(input=="GAME_FOR_TWO") {
+            //hostuj gre dla 2
+        } else if (input =="GAME_FOR_THREE"){
+            //hostuj gre dla 3
+        } else if (input =="GAME_FOR_FOUR"){
+            //hostuj gre dla 4
+        } else if (input =="GAME_FOR_SIX"){
+            //hostuj grę dla 6
+        } else if (input == "CONNECT_TO_GAME") {
+            //dolacz do istniejacej gry
+        } else
+            System.out.println("Program shouldn't be here");
 
-                // receive the answer from client
-                received = dis.readUTF();
 
-                if(received.equals("Exit"))
-                {
-                    System.out.println("Client " + this.s + " sends exit...");
-                    System.out.println("Closing this connection.");
-                    this.s.close();
-                    System.out.println("Connection closed");
-                    break;
-                }
-
-                // creating Date object
-                Date date = new Date();
-
-                // write on output stream based on the
-                // answer from the client
-                switch (received) {
-
-                    case "Date" :
-                        toreturn = fordate.format(date);
-                        dos.writeUTF(toreturn);
-                        break;
-
-                    case "Time" :
-                        toreturn = fortime.format(date);
-                        dos.writeUTF(toreturn);
-                        break;
-
-                    default:
-                        dos.writeUTF("Invalid input");
-                        break;
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        try
-        {
-            // closing resources
-            this.dis.close();
-            this.dos.close();
-
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 }

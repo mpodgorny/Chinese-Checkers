@@ -11,15 +11,28 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+
+import static java.lang.Boolean.TRUE;
+
 public class StartUpMenu {
+
+    /**
+     * User's unique nickname - uniqueness will be confirmed!
+     */
 
     String nickname;
 
+    /**
+     * Creates startup window, ask for a nickname, check if there is no player with this nickname
+     * already on the server, establish connection and open game menu.
+     * @param primaryStage
+     */
     StartUpMenu(Stage primaryStage) {
 
-        /**
-         * User's unique nickname - uniqueness will be confirmed!
-         */
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10, 10, 10, 10));
@@ -52,8 +65,28 @@ public class StartUpMenu {
                 if ((name.getText() != null && !name.getText().isEmpty())) {
                     nickname = name.getText();
 
-                    label.setText(nickname + " is your nickaname. Trying to connect..."); //TODO Sprawdzenie wyjatkowości nickname na serverze
-                    Menu menu = new Menu(primaryStage, nickname);
+                    label.setText(nickname + " is your nickaname. Trying to connect...");
+
+                    //próba podłączenia uzywajac nickname
+                    try {
+                        InetAddress ip = InetAddress.getByName("localhost"); //pobranie ip hosta
+                        Socket s = new Socket(ip, 2308);
+
+                        DataInputStream in = new DataInputStream(s.getInputStream());
+                        DataOutputStream out = new DataOutputStream(s.getOutputStream());
+
+                        out.writeUTF(nickname);
+
+                        if (in.readBoolean() ==TRUE) {
+                            Menu menu = new Menu(primaryStage, nickname, in, out); //w tym miejscu podłączylismy się do serwera, mamy indiwidualny in, out oraz nickname.
+                        } else {
+                            label.setText(nickname + " is taken! Please choose another one");
+                        }
+
+                    } catch (Exception ex) {}
+
+
+
                 } else {
                     label.setText("You have not chosed nickname.");
                 }

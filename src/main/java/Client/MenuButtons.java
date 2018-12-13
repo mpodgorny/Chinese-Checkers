@@ -6,28 +6,17 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class MenuButtons extends AbstractStage{
+    DataInputStream in;
+    DataOutputStream out;
 
 
-    private static int PORT = 2308;
-    private Socket socket;
-    private BufferedReader in;
-    PrintWriter out = null;
-
-
-    MenuButtons() {
-//niepoitrzebne??
-        try {
-            socket = new Socket("localhost", PORT);
-            in = new BufferedReader(new InputStreamReader(
-                    socket.getInputStream()));
-            out = new PrintWriter(socket.getOutputStream(), true);
-        } catch (Exception ex) {}
+    MenuButtons(String nickname, DataInputStream in, DataOutputStream out) {
+        this.in =in;
+        this.out=out;
 
         vbox.getChildren().add(btnForTwoPlayers());
         vbox.getChildren().add(btnForThreePlayers());
@@ -41,14 +30,14 @@ public class MenuButtons extends AbstractStage{
     }
 //TODO przejrzystsza implementacja przycisków xd
 
-//TODO jeśli gra istnieje, nie pozwól dołączyć
+//TODO jeśli gra istnieje, nie pozwól stworzyć nową
 
     Button btnForTwoPlayers( ) {
         Button btn = new Button ("2 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("GAME_FOR_TWO");
+                try { out.writeUTF("GAME_FOR_TWO");} catch (Exception ex) {}
 
             }
         });
@@ -61,7 +50,8 @@ public class MenuButtons extends AbstractStage{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("GAME_FOR_THREE");
+                try { out.writeUTF("GAME_FOR_THREE");} catch (Exception ex) {}
+
 
             }
         });
@@ -73,7 +63,8 @@ public class MenuButtons extends AbstractStage{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("GAME_FOR_FOUR");
+                try { out.writeUTF("GAME_FOR_FOUR");} catch (Exception ex) {}
+
 
             }
         });
@@ -85,7 +76,8 @@ public class MenuButtons extends AbstractStage{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("GAME_FOR_SIX");
+                try { out.writeUTF("GAME_FOR_SIX");} catch (Exception ex) {}
+
 
             }
         });
@@ -98,7 +90,8 @@ public class MenuButtons extends AbstractStage{
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                out.println("CONNECT_TO_GAME");
+                try { out.writeUTF("CONNECT_TO_GAME");} catch (Exception ex) {}
+
 
             }
         });
