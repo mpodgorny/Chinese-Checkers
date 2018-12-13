@@ -43,63 +43,70 @@ public class ServerMain  {
             Socket s = null;
 
 
-            /**
-             * Checking if somebody left session
-             */
-            for(int i = 0; i < sockets.size(); i++) {
-                if( sockets.get(i).isClosed() == TRUE) {
-                    sockets.remove(i);
-                    if(i>0){i--;}
-                }
-            }
+            clearSockets();
 
             try
             {
                 // socket object to receive incoming client requests
                 s = ss.accept();
 
-
-                System.out.println("A new player connected on adress : " + s);
-
-                // obtaining input and out streams
-                DataInputStream in = new DataInputStream(s.getInputStream());
-                DataOutputStream out = new DataOutputStream(s.getOutputStream());
-
-                sockets.add(s); //lista socketow do osblugi odłaczenia użytkownia, ustalania hosta itp - do implementacji.
-                in_list.add(in);
-                out_list.add(out);
-
-
-                //Pobiera nickname gracza
-                nickname=in.readUTF();
-                //jesli nickname zawiera sie w liście nickname'ow wysyla false
-                if(nicknames.contains(nickname)) {
-                    out.writeBoolean(FALSE);
-                    s.close();
-                    in.close();
-                    out.close();
-                    sockets.remove(s);
-                    System.out.println("Connection with "+s+" closed.");
-                    continue;
-                }
-
-                out.writeBoolean(TRUE);
-                nicknames.add(nickname);
-                System.out.println("added nickname |" + nickname +"|\n" +
-                        "Total player count: " + sockets.size());
-
-                // create a new thread object
-                Thread t = new ClientHandler(s, in, out, nickname);
+                Thread t = setupClientThread(s);
 
                 // Invoking the start() method
                 t.start();
 
+            }catch(NullPointerException nex){
+                System.out.println("Nickname is already taken!");
             }
             catch (Exception e){
                 s.close();
                 e.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Drop closed sockets
+     */
+    private static void clearSockets(){
+        for(int i = 0; i < sockets.size(); i++) {
+            if( sockets.get(i).isClosed() == TRUE) {
+                sockets.remove(i);
+                if(i>0){i--;}
+            }
+        }
+    }
+
+    private static Thread setupClientThread(Socket socket) throws IOException{
+        System.out.println("A new player connected on adress : " + socket);
+
+        // obtaining input and out streams
+        DataInputStream in = new DataInputStream(socket.getInputStream());
+        DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+
+        sockets.add(socket); //lista socketow do osblugi odłaczenia użytkownia, ustalania hosta itp - do implementacji.
+        in_list.add(in);
+        out_list.add(out);
+
+
+        //Pobiera nickname gracza
+        nickname=in.readUTF();
+        //jesli nickname zawiera sie w liście nickname'ow wysyla false
+        if(nicknames.contains(nickname)) {
+            out.writeBoolean(FALSE);
+            socket.close();
+            in.close();
+            out.close();
+            sockets.remove(socket);
+            System.out.println("Connection with "+socket+" closed.");
+            return null;        }
+
+        out.writeBoolean(TRUE);
+        nicknames.add(nickname);
+        System.out.println("added nickname |" + nickname +"|\n" +
+                "Total player count: " + sockets.size());
+
+        return new ClientHandler(socket, in, out, nickname);
     }
 
 }
