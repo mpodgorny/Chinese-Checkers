@@ -11,14 +11,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import static java.lang.Boolean.TRUE;
 
-public class StartUpMenu {
+public class StartUpMenu implements SocketControl {
 
     /**
      * User's unique nickname - uniqueness will be confirmed!
@@ -98,4 +98,51 @@ public class StartUpMenu {
         primaryStage.setScene(startup);
         primaryStage.show();
     }
+
+
+    //TODO: przygotowane do uporządkowania, chyba wedle zaleceń prowadzącego - za pomocą intefejsu.
+    @Override
+    public InetAddress getAddress() {
+        InetAddress ip = null; //pobranie ip hosta
+        try {
+            ip = InetAddress.getByName("localhost");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return ip;
+    }
+
+    @Override
+    public Socket getSocket(InetAddress ip) {
+        Socket s = null;
+        try {
+            s = new Socket(ip, 2308);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    @Override
+    public DataInputStream getInputStream(Socket s) {
+        DataInputStream in = null;
+        try {
+            in = new DataInputStream(s.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return in;
+    }
+
+    @Override
+    public DataOutputStream getOutputStream(Socket s) {
+        DataOutputStream out = null;
+        try {
+            out = new DataOutputStream(s.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+
 }
