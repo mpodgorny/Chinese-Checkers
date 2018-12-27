@@ -1,11 +1,17 @@
 package Client.Board;
 
 public class BoardDraw {
-
+    /**
+     * coordinates for table (x,y)
+     * @param HEIGHT
+     * @param WIDHT
+     */
     public static final int HEIGHT = 17;
     public static final int WIDHT = 25;
+
     public static final int TILE_RADIUS = 20;
-    public static final int PIECES_AMOUNT = 10; //TODO: assert czy liczba moze być trójkątem na planszy (1,3,6,10, itp).
+    public static final int PIECES_AMOUNT = 10;
+    private int Home;
 
     public BoardDraw() {
 
@@ -21,7 +27,7 @@ public class BoardDraw {
      * Serves purpose for future modification of board.
      * @return
      */
-    private int Lines_For_Pieces_Home() { //TODO: JUNIT assercja z TODO wyzej: czy koncowe pieces < 0
+    private void Lines_For_Pieces_Home() {
         int pieces=PIECES_AMOUNT;
         int count=0;
         int in_line_amount=1;
@@ -30,7 +36,7 @@ public class BoardDraw {
             in_line_amount = in_line_amount + 1;
             count++;
         }
-    return count;
+        this.Home=count;
     }
 
 }
