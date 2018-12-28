@@ -20,8 +20,8 @@ public class Tile extends Circle {
     }
 
     public Tile(double x, double y) {
-        setCenterX(x);
-        setCenterY(y);
+        //setCenterX(x);
+        //setCenterY(y);
         setRadius(TILE_RADIUS);
         setFill(Color.SILVER);
         isSmooth();
