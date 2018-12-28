@@ -1,5 +1,6 @@
 package Client;
 
+import Client.Board.BoardDraw;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -9,7 +10,9 @@ public class ClientMain extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        StartUpMenu start = new StartUpMenu(primaryStage);
+
+        BoardDraw bd = new BoardDraw(primaryStage);
+       //StartUpMenu start = new StartUpMenu(primaryStage);
     }
 
     public static void main(String[] args) {

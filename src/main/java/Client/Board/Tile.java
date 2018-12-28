@@ -1,5 +1,6 @@
 package Client.Board;
 
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import static Client.Board.BoardDraw.TILE_RADIUS;
@@ -22,5 +23,7 @@ public class Tile extends Circle {
         setCenterX(x);
         setCenterY(y);
         setRadius(TILE_RADIUS);
+        setFill(Color.SILVER);
+        isSmooth();
     }
 }

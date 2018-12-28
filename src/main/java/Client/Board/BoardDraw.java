@@ -1,5 +1,13 @@
 package Client.Board;
 
+import javafx.geometry.Insets;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+
 public class BoardDraw {
 
     /**
@@ -29,9 +37,37 @@ public class BoardDraw {
     public static final int TILE_RADIUS = 20;
     private Tile[][] board = new Tile[WIDTH][HEIGHT];
 
+    private Group tileGroup = new Group();
 
-    public BoardDraw() {
 
+    public BoardDraw(Stage primaryStage) {
+        GridPane grid = new GridPane();
+        grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setVgap(10);
+        grid.setHgap(30);
+
+        for(int y=HEIGHT-1;y>=0;y--) {
+            if(y>=HEIGHT-HOME_LINES) {
+                int temp = HEIGHT - HOME_LINES;
+                    Tile tile = new Tile(14, y);
+                    board[14][y] = tile;
+                    GridPane.setConstraints(tile, 14, y);
+                    GridPane.setColumnSpan(tile, 14);
+                    grid.getChildren().add(tile);
+                } else if (y==12) {
+                for(int i =2;i<27;i+=2) {
+                    Tile tile = new Tile(i,y);
+                    GridPane.setConstraints(tile, i, y);
+                    GridPane.setColumnSpan(tile, i);
+                    grid.getChildren().add(tile);
+                }
+            }
+
+        }
+        Scene startup = new Scene(grid, 400, 350);
+
+        primaryStage.setScene(startup);
+        primaryStage.show();
     }
 
     private void Draw() {
