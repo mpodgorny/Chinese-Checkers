@@ -34,7 +34,7 @@ public class BoardDraw {
      */
     public static int HEIGHT = 4*HOME_LINES +1;
     public static int WIDTH = 6*HOME_LINES+1;
-    public static final int TILE_RADIUS = 15;
+    public static final int TILE_RADIUS = 20;
     /**
      * Added 1 to becouse of clarity - when tile is x=14 y = 17 then we
      * dont have to interpret it in array-style counting (from 0)
@@ -46,31 +46,31 @@ public class BoardDraw {
 
     public BoardDraw(Stage primaryStage) {
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(20, 20, 20, 20));
-        //grid.setVgap(1);
-        //grid.setHgap(5);
+        grid.setPadding(new Insets(20, 20, 20, 250));
+        grid.setVgap(2);
+        grid.setHgap(-16);
 
-        DrawHomeTilesUpsideDown(2, 4, grid);
-        DrawHomeTilesUpsideDown(20, 4, grid);
-        DrawHomeTilesUpsideDown(11, 13, grid);
+       DrawHomeTilesUpsideDown(5, 7, grid);
+        DrawHomeTilesUpsideDown(23, 7, grid);
+        DrawHomeTilesUpsideDown(14, 16, grid);
+        DrawHexagon(10,12,grid);
+        DrawHomeTiles(5,9,grid);
+        DrawHomeTiles(14,0,grid);
+        DrawHomeTiles(23,9,grid);
 
-        DrawHomeTiles(14,17,grid);
-        //DrawHomeTiles(5,8,grid);
-        //DrawHomeTiles(23,8,grid);
-        Scene startup = new Scene(grid, 400, 350);
+        Scene startup = new Scene(grid, 800, 800);
         primaryStage.setScene(startup);
         primaryStage.show();
+        //System.out.println("HOME LINES: " + HOME_LINES + "HEIGHT: " + HEIGHT + "WIDTH: " + WIDTH);
+
     }
 
     private void DrawHomeTilesUpsideDown(int startX, int startY, GridPane grid) {
 
-        for(int y=startY;y>=startY-HOME_LINES;y--) {
+        for(int y=startY;y>startY-HOME_LINES;y--) {
             int tempStart=startX;
             for(int x=startY-y;x>=0;x--) {
-                Tile tile = new Tile(tempStart, y);
-                //board[tempStart][y] = tile;
-                GridPane.setConstraints(tile, tempStart+indentation, y);
-                grid.getChildren().add(tile);
+                addTile(tempStart, y, grid);
                 tempStart+=2;
             }
             startX--;
@@ -79,16 +79,51 @@ public class BoardDraw {
 
     private void DrawHomeTiles(int startX, int startY, GridPane grid) {
 
-        for(int y=startY;y>=startY-HOME_LINES;y--) {
+        for(int y=startY;y<startY+HOME_LINES;y++) {
             int tempStart = startX;
-            for(int x=0;x<=startY-y;x++) {
-                Tile tile = new Tile(tempStart+indentation, y);
-                //board[tempStart][y] = tile;
-                GridPane.setConstraints(tile, tempStart+indentation, y);
-                grid.getChildren().add(tile);
+            for(int x=startY-y;x<=0;x++) {
+                addTile(tempStart, y, grid);
                 tempStart+=2;
             }
             startX--;
         }
+    }
+
+    private void DrawHexagon(int startX, int startY, GridPane grid) {
+        int nr = 4;
+        for(int i=startY;i>=4;i--){
+            int temp=startX;
+
+            if(i>=8) {
+                nr++;
+                for (int x =nr; x > 0; x--) {
+                    addColoredTile(temp, i, grid, Color.GRAY);
+                    temp+=2;
+                }
+                startX--;
+            } else {
+                nr--;
+                temp+=2;
+                startX++;
+                for(int x=nr;x>0;x--){
+                    addColoredTile(temp, i, grid, Color.GRAY);
+                    temp+=2;
+                }
+
+            }
+        }
+    }
+
+    void addTile(int x, int y, GridPane grid) {
+        Tile tile = new Tile(x,y);
+        GridPane.setConstraints(tile, x+indentation,y);
+        grid.getChildren().add(tile);
+
+    }
+    void addColoredTile(int x, int y, GridPane grid, Color color) {
+        Tile tile = new Tile(x,y, color);
+        GridPane.setConstraints(tile, x+indentation,y);
+        grid.getChildren().add(tile);
+
     }
 }

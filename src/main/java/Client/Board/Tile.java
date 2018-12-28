@@ -26,4 +26,11 @@ public class Tile extends Circle {
         setFill(Color.SILVER);
         isSmooth();
     }
+    public Tile(double x, double y, Color color) {
+        //setCenterX(x);
+        //setCenterY(y);
+        setRadius(TILE_RADIUS);
+        setFill(color);
+        isSmooth();
+    }
 }
