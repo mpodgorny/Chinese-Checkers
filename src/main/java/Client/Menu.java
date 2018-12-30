@@ -26,7 +26,7 @@ public class Menu extends AbstractStage {
 
         final Label label = new Label("Welcome, " + nickname +".\n \b\b\b\bChoose option: ");
         vbox.getChildren().add(label);
-        MenuButtons btns = new MenuButtons(nickname, in, out);
+        MenuButtons btns = new MenuButtons(nickname, in, out, primaryStage);
 
 
         scene.setFill(Color.BLACK);

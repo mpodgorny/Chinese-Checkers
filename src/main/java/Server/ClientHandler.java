@@ -13,6 +13,7 @@ public class ClientHandler extends Thread {
     final DataOutputStream out;
     final Socket s;
     String nick;
+    Boolean gameOn = false;
 
 
     // Constructor
@@ -32,14 +33,33 @@ public class ClientHandler extends Thread {
 
         if(input=="GAME_FOR_TWO") {
             //hostuj gre dla 2
+            if(!gameOn) {
+                gameOn=true;
+
+            }
         } else if (input =="GAME_FOR_THREE"){
             //hostuj gre dla 3
+            if(!gameOn) {
+                gameOn=true;
+
+            }
         } else if (input =="GAME_FOR_FOUR"){
             //hostuj gre dla 4
+            if(!gameOn) {
+                gameOn=true;
+
+            }
         } else if (input =="GAME_FOR_SIX"){
             //hostuj grę dla 6
+            if(!gameOn) {
+                gameOn=true;
+
+            }
         } else if (input == "CONNECT_TO_GAME") {
             //dolacz do istniejacej gry
+            if(gameOn) {
+
+            }
         } else
             System.out.println("Program shouldn't be here");
 
