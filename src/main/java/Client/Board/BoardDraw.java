@@ -17,7 +17,7 @@ public class BoardDraw {
     private StackPane stackPane;
 
     public BoardDraw(Stage primaryStage, StarBoard board) {
-        Scene startup = new Scene(drawTiles(board),800, 800);
+        Scene startup = new Scene(drawTiles(board));
         primaryStage.setScene(startup);
         primaryStage.show();
 
@@ -25,7 +25,7 @@ public class BoardDraw {
 
     private Parent drawTiles(StarBoard board){
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(20, 20, 20, 70));
+        grid.setPadding(new Insets(20, 20, 20, 20));
         grid.setVgap(2);
         grid.setHgap(-16);
         for(int i=0; i<board.getHeight(); i++){

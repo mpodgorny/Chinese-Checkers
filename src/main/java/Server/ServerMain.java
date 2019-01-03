@@ -25,7 +25,7 @@ public class ServerMain  {
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
-    public static StarBoard board = new StarBoard(121);
+    public static StarBoard board = new StarBoard(13);
 
     /**
      * Temporary variable for holding new nickname.
