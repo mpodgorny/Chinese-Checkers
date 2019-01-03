@@ -22,7 +22,8 @@ public class ServerMain  {
     static List<String> nicknames = new ArrayList<String>();
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
-    static List <DataOutputStream> out_list = new ArrayList<DataOutputStream>();
+    static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
+
 
     /**
      * Temporary variable for holding new nickname.
@@ -99,7 +100,8 @@ public class ServerMain  {
             out.close();
             sockets.remove(socket);
             System.out.println("Connection with "+socket+" closed.");
-            return null;        }
+            return null;
+        }
 
         out.writeBoolean(TRUE);
         nicknames.add(nickname);

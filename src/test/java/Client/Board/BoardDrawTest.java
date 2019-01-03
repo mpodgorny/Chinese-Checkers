@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class BoardDrawTest {
     BoardDraw bd;
-   double temp;
+    double temp;
     double nr_of_lines;
 
 

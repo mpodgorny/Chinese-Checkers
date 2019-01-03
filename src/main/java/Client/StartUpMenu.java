@@ -44,16 +44,17 @@ public class StartUpMenu implements SocketControl {
         GridPane.setColumnSpan(label, 2);
         grid.getChildren().add(label);
 
-        final Label welcome_txt = new Label ("Welcome to Trylma: the Chinese Checkers.\n Please, enter your nickname and connect to the server.");
+        final Label welcome_txt = new Label ("Welcome to Trylma: the Chinese Checkers.\nPlease, enter your nickname and connect to the server.");
         GridPane.setConstraints(welcome_txt, 1, 1);
         grid.getChildren().add(welcome_txt);
-
 
         final TextField name = new TextField();
         name.setPrefColumnCount(10);
         GridPane.setConstraints(name, 1, 7);
         grid.getChildren().add(name);
+
         Scene startup = new Scene(grid, 400, 350, Color.BLACK);
+
         Button submit = new Button("Connect");
         GridPane.setConstraints(submit, 1, 10);
         grid.getChildren().add(submit);
@@ -88,7 +89,7 @@ public class StartUpMenu implements SocketControl {
 
 
                 } else {
-                    label.setText("You have not chosed nickname.");
+                    label.setText("You did not chose nickname.");
                 }
             }
         });

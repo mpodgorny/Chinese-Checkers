@@ -11,8 +11,8 @@ public class ClientMain extends Application {
     public void start(Stage primaryStage) {
 
 
-        BoardDraw bd = new BoardDraw(primaryStage);
-       //StartUpMenu start = new StartUpMenu(primaryStage);
+        //BoardDraw bd = new BoardDraw(primaryStage);
+        StartUpMenu start = new StartUpMenu(primaryStage);
     }
 
     public static void main(String[] args) {

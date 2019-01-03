@@ -34,7 +34,7 @@ public class MenuButtons extends AbstractStage{
 
 //TODO jeśli gra istnieje, nie pozwól stworzyć nową
 
-    Button btnForTwoPlayers(Stage primaryStage ) {
+    Button btnForTwoPlayers(Stage primaryStage) {
         Button btn = new Button ("2 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -97,7 +97,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("CONNECT_TO_GAME");} catch (Exception ex) {}
-
 
             }
         });

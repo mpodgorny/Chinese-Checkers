@@ -13,7 +13,7 @@ public class ClientHandler extends Thread {
     final DataOutputStream out;
     final Socket s;
     String nick;
-    Boolean gameOn = false;
+    static Boolean gameOn = false;
 
 
     // Constructor
@@ -29,40 +29,46 @@ public class ClientHandler extends Thread {
     public void run()
     {
         String input ="";
-        try { input = in.readUTF();} catch(Exception ex) {}
+        try {
+            input = in.readUTF();
+            System.out.println(input);
+        }catch(Exception ex) {
+            System.out.println("coś jest nie tak");
+        }
 
-        if(input=="GAME_FOR_TWO") {
+        if(input.equals("GAME_FOR_TWO")) {
             //hostuj gre dla 2
             if(!gameOn) {
                 gameOn=true;
-
+                System.out.println("Gra się rozpoczeła");
             }
-        } else if (input =="GAME_FOR_THREE"){
+        } else if (input.equals("GAME_FOR_THREE")){
             //hostuj gre dla 3
             if(!gameOn) {
                 gameOn=true;
 
             }
-        } else if (input =="GAME_FOR_FOUR"){
+        } else if (input.equals("GAME_FOR_FOUR")){
             //hostuj gre dla 4
             if(!gameOn) {
                 gameOn=true;
 
             }
-        } else if (input =="GAME_FOR_SIX"){
+        } else if (input.equals("GAME_FOR_SIX")){
             //hostuj grę dla 6
             if(!gameOn) {
                 gameOn=true;
 
             }
-        } else if (input == "CONNECT_TO_GAME") {
+        } else if (input.equals("CONNECT_TO_GAME")) {
             //dolacz do istniejacej gry
             if(gameOn) {
+                System.out.println("Dołączono do gry");
 
             }
-        } else
+        } else {
             System.out.println("Program shouldn't be here");
-
+        }
 
     }
 }

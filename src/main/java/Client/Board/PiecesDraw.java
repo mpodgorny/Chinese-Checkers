@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import static Client.Board.BoardDraw.*;
 
 public class PiecesDraw {
-  public PiecesDraw(int playerNumber, Scene scene) {
+    public PiecesDraw(int playerNumber, Scene scene) {
         switch (playerNumber) {
             case 2:
                 DrawForTwo();
@@ -27,17 +27,19 @@ public class PiecesDraw {
 
     }
 
-
     public void DrawForTwo() {
 
     }
-        public void DrawForThree () {
 
-        }
-        public void DrawForFour () {
+    public void DrawForThree () {
 
-        }
-        public void DrawForSix () {
+    }
 
-        }
+    public void DrawForFour () {
+
+    }
+
+    public void DrawForSix () {
+
+    }
 }
