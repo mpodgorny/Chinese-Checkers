@@ -1,6 +1,8 @@
 package Server;
 
 
+import Client.Board.StarBoard;
+
 import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
@@ -23,7 +25,7 @@ public class ServerMain  {
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
-
+    public static StarBoard board = new StarBoard(121);
 
     /**
      * Temporary variable for holding new nickname.

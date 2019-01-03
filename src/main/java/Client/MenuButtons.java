@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Board.BoardDraw;
+import Server.ServerMain;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -40,7 +41,7 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_TWO");} catch (Exception ex) {}
-                BoardDraw bd = new BoardDraw(primaryStage);
+                BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
 
             }
         });
@@ -54,7 +55,7 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_THREE");} catch (Exception ex) {}
-                BoardDraw bd = new BoardDraw(primaryStage);
+                BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
 
 
             }
@@ -68,7 +69,7 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_FOUR");} catch (Exception ex) {}
-                BoardDraw bd = new BoardDraw(primaryStage);
+                BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
 
 
             }
@@ -82,7 +83,7 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_SIX");} catch (Exception ex) {}
-                BoardDraw bd = new BoardDraw(primaryStage);
+                BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
 
 
             }

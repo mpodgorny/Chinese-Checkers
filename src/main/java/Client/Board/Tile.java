@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import static Client.Board.BoardDraw.TILE_RADIUS;
+import static Client.Board.StarBoard.TILE_RADIUS;
 
 public class Tile extends Circle {
 

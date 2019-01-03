@@ -1,14 +1,11 @@
 package Client.Board;
 
-import com.sun.org.apache.xerces.internal.dom.ChildNode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-import static Client.Board.BoardDraw.TILE_RADIUS;
-import static Client.Board.BoardDraw.indentation;
-import static sun.dc.pr.Rasterizer.TILE_SIZE;
+import static Client.Board.StarBoard.TILE_RADIUS;
 
 public class Piece extends StackPane {
 

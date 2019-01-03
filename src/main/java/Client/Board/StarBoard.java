@@ -6,7 +6,7 @@ public class StarBoard {
     private final int homeLines;
     private final int height;
     private final int width;
-    private int tileRadius;
+    public static int TILE_RADIUS;
     private Tile[][] board;
 
     public StarBoard(int tilesCount){
@@ -15,7 +15,7 @@ public class StarBoard {
         homeLines = (int)(Math.sqrt((8*((tilesCount-1)/12)+1))-1)/2;
         height = 4*homeLines+1;
         width = 6*homeLines+1;
-        tileRadius = 20;
+        TILE_RADIUS = 20;
         board = new Tile[width][height];
         makeBoard(homeLines);
         simpleCheck();
@@ -92,7 +92,7 @@ public class StarBoard {
         }
     }
 
-    private void simpleCheck(){
+    public void simpleCheck(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
                 if(board[j][i].getTypeOfTile()=="HOME")
@@ -104,5 +104,21 @@ public class StarBoard {
             }
             System.out.println();
         }
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public void setBoard(Tile[][] board) {
+        this.board = board;
     }
 }
