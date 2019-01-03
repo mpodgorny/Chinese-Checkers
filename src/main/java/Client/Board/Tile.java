@@ -10,6 +10,16 @@ public class Tile extends Circle {
 
     private Piece piece;
 
+    private String typeOfTile;
+
+    public String getTypeOfTile() {
+        return typeOfTile;
+    }
+
+    public void setTypeOfTile(String typeOfTile) {
+        this.typeOfTile = typeOfTile;
+    }
+
     public boolean hasPiece() {
         return piece != null;
     }
