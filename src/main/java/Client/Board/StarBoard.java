@@ -1,5 +1,7 @@
 package Client.Board;
 
+import javafx.scene.paint.Color;
+
 public class StarBoard {
     private final int tilesCount;
     private final int piecesCount;
@@ -18,7 +20,7 @@ public class StarBoard {
         TILE_RADIUS = 20;
         board = new Tile[width][height];
         makeBoard(homeLines);
-        simpleCheck();
+        //simpleCheck();
     }
 
     private void makeBoard(int size){
@@ -78,7 +80,7 @@ public class StarBoard {
         for(int i = y; i<y-1+side*2; i++){
             int tempX = x + side - count;
             for(int j=0; j<count; j++){
-                Tile tile = new Tile(tempX, i);
+                Tile tile = new Tile(tempX, i, Color.LIGHTGRAY);
                 tile.setTypeOfTile("MIDDLE");
                 board[tempX][i] = tile;
                 tempX = tempX + 2;
@@ -92,6 +94,8 @@ public class StarBoard {
         }
     }
 
+    //Prosta metoda drukująca gwiazdki w konsoli - potrzebowałem jej do sprawdzania algorytmów rysowania
+    //Może się jeszcze przydać, więc zostawiam
     public void simpleCheck(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
