@@ -9,17 +9,18 @@ import static Client.Board.StarBoard.TILE_RADIUS;
 
 public class Piece extends StackPane {
 
-    static private final double PIECE_SIZE = TILE_RADIUS*0.8;
+    static private final double PIECE_SIZE = TILE_RADIUS*0.75;
     private double mouseX, mouseY;
     private double oldX, oldY;
+    public int X, Y;
 
-    public Piece(int x, int y) {
+    public Piece(Color color, int x, int y) {
 
         Circle piece = new Circle();
         piece.setStroke(Color.RED);
         piece.setStrokeWidth(PIECE_SIZE * 0.03);
         piece.setRadius(PIECE_SIZE);
-        piece.setFill(Color.RED);
+        piece.setFill(color);
         piece.setStroke(Color.DARKGRAY);
         piece.setStrokeWidth(TILE_RADIUS * 0.06);
         piece.isSmooth();
@@ -40,4 +41,5 @@ public class Piece extends StackPane {
     public double getOldY() {
         return oldY;
     }
+
 }

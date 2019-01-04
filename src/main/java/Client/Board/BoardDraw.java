@@ -13,8 +13,7 @@ import javafx.stage.Stage;
 import java.util.Stack;
 
 public class BoardDraw {
-
-    private StackPane stackPane;
+    private GridPane grid;
 
     public BoardDraw(Stage primaryStage, StarBoard board) {
         Scene startup = new Scene(drawTiles(board));
@@ -25,6 +24,7 @@ public class BoardDraw {
 
     private Parent drawTiles(StarBoard board){
         GridPane grid = new GridPane();
+        this.grid = grid;
         grid.setPadding(new Insets(20, 20, 20, 20));
         grid.setVgap(2);
         grid.setHgap(-16);
@@ -39,4 +39,6 @@ public class BoardDraw {
 
         return grid;
     }
+
+    public GridPane getGrid() {return this.grid;}
 }

@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Board.BoardDraw;
+import Client.Board.FillBoard;
 import Client.Board.StarBoard;
 import Server.ServerMain;
 import javafx.application.Application;
@@ -11,7 +12,7 @@ public class ClientMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
+        //FillBoard fb = new FillBoard(2,primaryStage);
         //BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
         StartUpMenu start = new StartUpMenu(primaryStage);
     }
