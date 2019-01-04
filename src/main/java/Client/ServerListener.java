@@ -1,5 +1,7 @@
 package Client;
 
+import Client.Board.BoardDraw;
+import Server.ServerMain;
 import javafx.application.Platform;
 
 import java.io.*;
@@ -38,6 +40,7 @@ public class ServerListener extends Thread {
                  System.out.println("i znowu");
                     break;
                 case "HOST_FOR_TWO":
+                    LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, ServerMain.lobby);
 
                     break;
 

@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import static Server.ServerMain.ar;
+import static Server.ServerMain.gameStarted;
 
 public class ClientHandler extends Thread {
 
@@ -103,7 +104,8 @@ public class ClientHandler extends Thread {
 
             } else if (input.equals("CONNECT_TO_GAME")) {
                 //dolacz do istniejacej gry
-                if (askIfHosts()) {
+                if (askIfHosts() && !gameStarted) {
+                    ServerMain.lobby.addPlayer(nick);
                     System.out.println("Dołączono do gry");
                     try {
                         out.writeUTF("CONNECT");
