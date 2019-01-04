@@ -1,24 +1,27 @@
 package Server;
 
+import Client.ServerListener;
+import javafx.scene.paint.Color;
+
 import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import static Server.ServerMain.ar;
+
 import static Server.ServerMain.gameStarted;
+import static javafx.scene.paint.Color.*;
 
 public class ClientHandler extends Thread {
-
-    DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
-    DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
     final DataInputStream in;
     final DataOutputStream out;
     final Socket s;
     String nick;
     static Boolean isHost = false;
-    int typeOfGame;
     ServerMain serverMain;
+    private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
+    public int numberOfPlayers;
 
     // Constructor
     public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname, ServerMain serverMain) {
@@ -31,6 +34,7 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
+        int colorGiver=1;
         while (true){
         String input = "";
         try {
@@ -45,6 +49,7 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla dwoch");
                     try {
+                        giveNumberOfPlayers(2);
                         out.writeUTF("HOST_FOR_TWO");
                     } catch (IOException ex) {
                     }
@@ -62,6 +67,7 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla trzech");
                     try {
+                        giveNumberOfPlayers(3);
                         out.writeUTF("HOST_FOR_THREE");
                     } catch (IOException ex) {
                     }
@@ -77,6 +83,7 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla czterech");
                     try {
+                        giveNumberOfPlayers(4);
                         out.writeUTF("HOST_FOR_FOUR");
                     } catch (IOException ex) {
                     }
@@ -92,6 +99,7 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla szesciu");
                     try {
+                        giveNumberOfPlayers(6);
                         out.writeUTF("HOST_FOR_SIX");
                     } catch (IOException ex) {
                     }
@@ -109,6 +117,9 @@ public class ClientHandler extends Thread {
                     System.out.println("Dołączono do gry");
                     try {
                         out.writeUTF("CONNECT");
+                        try{out.writeInt(colorGiver);}catch(IOException x) {}
+                        colorGiver++;
+                        out.writeInt(numberOfPlayers);
                     } catch (IOException ex) {
                     }
                 } else
@@ -136,5 +147,11 @@ public class ClientHandler extends Thread {
         }
         System.out.println("Ktos hostuje: " + isHosting);
         return isHosting;
+    }
+    private void giveNumberOfPlayers(int nr) {
+        this.numberOfPlayers=nr;
+        for (ClientHandler ch: ServerMain.ar) {
+        ch.numberOfPlayers=nr;
+        }
     }
 }

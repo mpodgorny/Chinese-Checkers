@@ -13,9 +13,11 @@ public class Piece extends StackPane {
     private double mouseX, mouseY;
     private double oldX, oldY;
     public int X, Y;
+    private Color color;
 
     public Piece(Color color, int x, int y) {
 
+        this.color=color;
         Circle piece = new Circle();
         piece.setStroke(Color.RED);
         piece.setStrokeWidth(PIECE_SIZE * 0.03);
@@ -41,5 +43,7 @@ public class Piece extends StackPane {
     public double getOldY() {
         return oldY;
     }
+
+    public Color getColor(){return this.color;}
 
 }

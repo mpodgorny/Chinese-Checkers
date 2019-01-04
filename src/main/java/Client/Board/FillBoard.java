@@ -1,13 +1,15 @@
 package Client.Board;
 
 import Server.ServerMain;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class FillBoard {
 
-    public FillBoard(int numberOfPlayers, Stage primaryStage) {
+
+    public FillBoard(int numberOfPlayers, Stage primaryStage, Color color) {
         BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
-        PiecesDraw piecesDraw = new PiecesDraw(numberOfPlayers, bd.getGrid());
+        PiecesDraw piecesDraw = new PiecesDraw(numberOfPlayers, bd.getGrid(), color);
 
 
     }

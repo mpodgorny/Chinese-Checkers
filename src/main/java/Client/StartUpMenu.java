@@ -71,7 +71,7 @@ public class StartUpMenu implements SocketControl {
                     //próba podłączenia uzywajac nickname
                     try {
                         InetAddress ip = InetAddress.getByName("localhost"); //pobranie ip hosta
-                        Socket s = new Socket(ip, 2308);
+                        Socket s = new Socket(ip, 2318);
 
                         DataInputStream in = new DataInputStream(s.getInputStream());
                         DataOutputStream out = new DataOutputStream(s.getOutputStream());
