@@ -14,6 +14,7 @@ public class ClientHandler extends Thread {
     final Socket s;
     String nick;
     static Boolean gameOn = false;
+    int typeOfGame;
 
 
     // Constructor

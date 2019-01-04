@@ -9,10 +9,12 @@ import static Server.ServerMain.board;
 public class Player {
 
     private Piece[] pieces = new Piece[10];
+    private String nick;
 
 
     public Player(Color color, String type, GridPane grid){
         fillHome(type,grid,color);
+        this.nick=nick;
 
     }
 

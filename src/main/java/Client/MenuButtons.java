@@ -16,12 +16,12 @@ import java.net.Socket;
 public class MenuButtons extends AbstractStage{
     DataInputStream in;
     DataOutputStream out;
-
+    String nickname;
 
     MenuButtons(String nickname, DataInputStream in, DataOutputStream out, Stage primaryStage) {
         this.in =in;
         this.out=out;
-
+        this.nickname=nickname;
         vbox.getChildren().add(btnForTwoPlayers(primaryStage));
         vbox.getChildren().add(btnForThreePlayers(primaryStage));
         vbox.getChildren().add(btnForFourPlayers(primaryStage));
@@ -82,7 +82,8 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_SIX");} catch (Exception ex) {}
-                FillBoard fillBoard = new FillBoard(6, primaryStage);
+                Lobby lobby = new Lobby(primaryStage, nickname,6,in);
+                //FillBoard fillBoard = new FillBoard(6, primaryStage);
 
             }
         });

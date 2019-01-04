@@ -8,8 +8,10 @@ import static Server.ServerMain.board;
 
 
 public class PiecesDraw {
+    String[] nickNames;
 
     public PiecesDraw(int playerNumber, GridPane grid) {
+        this.nickNames=nickNames;
         switch (playerNumber) {
             case 2:
                 DrawForTwo(grid);
