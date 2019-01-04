@@ -2,7 +2,9 @@ package Server;
 
 
 import Client.Board.StarBoard;
+import Client.ServerListener;
 
+import javax.sound.sampled.Port;
 import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
@@ -10,14 +12,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Vector;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 
 public class ServerMain  {
-
-
+    static ServerMain server;
     /**
      * @param nicknames holds all names of players.
      */
@@ -25,7 +27,11 @@ public class ServerMain  {
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
+    static List<Thread> thread_list = new ArrayList<Thread>();
     public static StarBoard board = new StarBoard(121);
+    static Vector<ClientHandler> ar = new Vector<>();
+
+    ServerSocket ss;
 
     /**
      * Temporary variable for holding new nickname.
@@ -40,18 +46,15 @@ public class ServerMain  {
 
 
     public static void main(String[] args) throws IOException{
-        ServerSocket ss = new ServerSocket(2308);
+        server = new ServerMain();
         while (true)
         {
             Socket s = null;
-
-
             clearSockets();
-
             try
             {
                 // socket object to receive incoming client requests
-                s = ss.accept();
+                s = server.ss.accept();
 
                 Thread t = setupClientThread(s);
 
@@ -68,6 +71,14 @@ public class ServerMain  {
         }
     }
 
+    public ServerMain() {
+        try {
+            ServerSocket ss = new ServerSocket(2308);
+            this.ss = ss;
+        } catch(IOException ex) {}
+    }
+
+
     /**
      * Drop closed sockets
      */
@@ -80,9 +91,8 @@ public class ServerMain  {
         }
     }
 
-    private static Thread setupClientThread(Socket socket) throws IOException{
+    private static ClientHandler setupClientThread(Socket socket) throws IOException{
         System.out.println("A new player connected on adress : " + socket);
-
         // obtaining input and out streams
         DataInputStream in = new DataInputStream(socket.getInputStream());
         DataOutputStream out = new DataOutputStream(socket.getOutputStream());
@@ -109,8 +119,9 @@ public class ServerMain  {
         nicknames.add(nickname);
         System.out.println("added nickname |" + nickname +"|\n" +
                 "Total player count: " + sockets.size());
-
-        return new ClientHandler(socket, in, out, nickname);
+        ClientHandler clientHandler = new ClientHandler(socket, in, out, nickname, server);
+        ar.add(clientHandler);
+        return clientHandler;
     }
 
 }

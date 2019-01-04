@@ -14,14 +14,14 @@ import java.io.*;
 import java.net.Socket;
 
 public class MenuButtons extends AbstractStage{
-    DataInputStream in;
     DataOutputStream out;
     String nickname;
-
-    MenuButtons(String nickname, DataInputStream in, DataOutputStream out, Stage primaryStage) {
+    Socket socket;
+    MenuButtons(String nickname, DataInputStream in, DataOutputStream out, Stage primaryStage, Socket socket) {
         this.in =in;
         this.out=out;
         this.nickname=nickname;
+        this.socket = socket;
         vbox.getChildren().add(btnForTwoPlayers(primaryStage));
         vbox.getChildren().add(btnForThreePlayers(primaryStage));
         vbox.getChildren().add(btnForFourPlayers(primaryStage));
@@ -32,9 +32,6 @@ public class MenuButtons extends AbstractStage{
         vbox.setAlignment(Pos.CENTER);
 
     }
-//TODO przejrzystsza implementacja przycisków xd
-
-//TODO jeśli gra istnieje, nie pozwól stworzyć nową
 
     Button btnForTwoPlayers(Stage primaryStage) {
         Button btn = new Button ("2 players");
@@ -42,7 +39,7 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_TWO");} catch (Exception ex) {}
-                FillBoard fillBoard = new FillBoard(2, primaryStage);
+                System.out.println("powtarzam!");
             }
         });
         return btn;
@@ -55,9 +52,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_THREE");} catch (Exception ex) {}
-                FillBoard fillBoard = new FillBoard(3, primaryStage);
-
-
             }
         });
         return btn;
@@ -69,8 +63,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_FOUR");} catch (Exception ex) {}
-                FillBoard fillBoard = new FillBoard(4, primaryStage);
-
             }
         });
         return btn;
@@ -82,9 +74,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_SIX");} catch (Exception ex) {}
-                Lobby lobby = new Lobby(primaryStage, nickname,6,in);
-                //FillBoard fillBoard = new FillBoard(6, primaryStage);
-
             }
         });
         return btn;
@@ -97,7 +86,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("CONNECT_TO_GAME");} catch (Exception ex) {}
-
             }
         });
         return btn;

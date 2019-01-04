@@ -20,13 +20,19 @@ import java.net.Socket;
 
 public class Menu extends AbstractStage {
 
-    public Menu(Stage primaryStage, String nickname, DataInputStream in, DataOutputStream out) {
 
 
+    public Menu(Stage primaryStage, String nickname, DataInputStream in, DataOutputStream out, Socket socket) {
+
+        this.in = in;
+        this.out = out;
+        this.socket = socket;
+        this.nickname = nickname;
+        this.primaryStage = primaryStage;
 
         final Label label = new Label("Welcome, " + nickname +".\n \b\b\b\bChoose option: ");
         vbox.getChildren().add(label);
-        MenuButtons btns = new MenuButtons(nickname, in, out, primaryStage);
+        MenuButtons btns = new MenuButtons(nickname, in, out, primaryStage, socket);
 
 
         scene.setFill(Color.BLACK);

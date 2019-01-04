@@ -79,7 +79,10 @@ public class StartUpMenu implements SocketControl {
                         out.writeUTF(nickname);
 
                         if (in.readBoolean() ==TRUE) {
-                            Menu menu = new Menu(primaryStage, nickname, in, out); //w tym miejscu podłączylismy się do serwera, mamy indiwidualny in, out oraz nickname.
+                            Menu menu = new Menu(primaryStage, nickname, in, out, s);
+                            ServerListener serverListener = new ServerListener(menu);
+                            Thread t1= new Thread(serverListener);
+                            t1.start();
                         } else {
                             label.setText(nickname + " is taken! Please choose another one");
                         }
