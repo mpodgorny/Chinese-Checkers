@@ -27,10 +27,9 @@ public class ServerMain  {
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
+    static List<Thread> thread_list = new ArrayList<Thread>();
     public static StarBoard board = new StarBoard(121);
     static Vector<ClientHandler> ar = new Vector<>();
-    static List<Thread> thread_list = new ArrayList<Thread>();
-    public static Lobby lobby;
     public static Boolean gameStarted = FALSE;
 
     ServerSocket ss;
@@ -38,7 +37,13 @@ public class ServerMain  {
     /**
      * Temporary variable for holding new nickname.
      */
-    static String nickname;
+    static String nickname = "";
+
+    /**
+     * Signals if some player started the game
+     */
+    static Boolean game_on = FALSE;
+
 
 
     public static void main(String[] args) throws IOException{
@@ -69,7 +74,7 @@ public class ServerMain  {
 
     public ServerMain() {
         try {
-            ServerSocket ss = new ServerSocket(2318);
+            ServerSocket ss = new ServerSocket(2308);
             this.ss = ss;
         } catch(IOException ex) {}
     }

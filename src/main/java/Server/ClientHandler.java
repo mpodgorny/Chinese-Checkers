@@ -1,28 +1,27 @@
 package Server;
 
-import Client.ServerListener;
-import javafx.scene.paint.Color;
-
 import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import static Server.ServerMain.ar;
-
 import static Server.ServerMain.gameStarted;
-import static javafx.scene.paint.Color.*;
 
 public class ClientHandler extends Thread {
+
+    DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
+    DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
     final DataInputStream in;
     final DataOutputStream out;
     final Socket s;
     String nick;
     static Boolean isHost = false;
+    int typeOfGame;
     ServerMain serverMain;
-    private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
-    public int numberOfPlayers;
-    public static int connected=1;
+    private static volatile int sizeOfLobby;
+    private static volatile int numberOfPlayers;
+    private boolean gotSignal = false;
 
     // Constructor
     public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname, ServerMain serverMain) {
@@ -35,24 +34,35 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        int colorGiver=1;
         while (true){
-        String input = "";
-        try {
-            input = in.readUTF();
-            System.out.println("Dostalismy: " + input);
-        } catch (Exception ex) {
-            System.out.println("coś jest nie tak");
-        }
+            String input = "";
+            if (gotSignal && numberOfPlayers == sizeOfLobby && sizeOfLobby > 1){
+                try {
+                    out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
+                    gotSignal = false;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(!gotSignal)
+            try {
+                input = in.readUTF();
+                System.out.println("Dostalismy: " + input);
+            } catch (Exception ex) {
+                System.out.println("coś jest nie tak");
+            }
 
             if (input.equals("GAME_FOR_TWO")) {
                 if (!askIfHosts()) {
                     isHost = true;
                     System.out.println("Hostuj gre dla dwoch");
                     try {
-                        giveNumberOfPlayers(2);
                         out.writeUTF("HOST_FOR_TWO");
-                    } catch (IOException ex) {
+                        gotSignal = true;
+                        numberOfPlayers = 1;
+                        sizeOfLobby = 2;
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 } else
                     System.out.println("Cannot host - game room in progress");
@@ -68,8 +78,10 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla trzech");
                     try {
-                        giveNumberOfPlayers(3);
                         out.writeUTF("HOST_FOR_THREE");
+                        numberOfPlayers = 1;
+                        sizeOfLobby = 3;
+                        gotSignal = true;
                     } catch (IOException ex) {
                     }
                 } else
@@ -84,8 +96,10 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla czterech");
                     try {
-                        giveNumberOfPlayers(4);
                         out.writeUTF("HOST_FOR_FOUR");
+                        numberOfPlayers = 1;
+                        sizeOfLobby = 4;
+                        gotSignal = true;
                     } catch (IOException ex) {
                     }
                 } else
@@ -100,8 +114,10 @@ public class ClientHandler extends Thread {
                     isHost = true;
                     System.out.println("Hostuj gre dla szesciu");
                     try {
-                        giveNumberOfPlayers(6);
                         out.writeUTF("HOST_FOR_SIX");
+                        numberOfPlayers = 1;
+                        sizeOfLobby = 6;
+                        gotSignal = true;
                     } catch (IOException ex) {
                     }
                 } else
@@ -113,31 +129,13 @@ public class ClientHandler extends Thread {
 
             } else if (input.equals("CONNECT_TO_GAME")) {
                 //dolacz do istniejacej gry
-                if (askIfHosts()) {
+                if (askIfHosts() && numberOfPlayers < sizeOfLobby) {
+
                     System.out.println("Dołączono do gry");
                     try {
-                        out.writeUTF("CONNECT");
-                        connected+=1;
-                        incrementNrOfConnectedPlayers(connected);
-                        try{out.writeInt(colorGiver);
-                            out.writeInt(connected);
-                        } catch(IOException x) {}
-                        colorGiver++;
-                        out.writeInt(numberOfPlayers);
-                        if(numberOfPlayers==connected) {
-                            out.writeBoolean(true);
-                            for (ClientHandler ch: ServerMain.ar) {
-                                    ch.out.writeUTF("GAME_READY");
-                                    ch.out.writeInt(numberOfPlayers);
-                                    GameLogicHandler gh = new GameLogicHandler(this);
-
-                            }
-                        } else {
-                            out.writeBoolean(false);
-
-                        }
-
-
+                        numberOfPlayers++;
+                        out.writeUTF("CONNECT" + numberOfPlayers);
+                        gotSignal = true;
                     } catch (IOException ex) {
                     }
                 } else
@@ -147,7 +145,7 @@ public class ClientHandler extends Thread {
                     }
 
             } else {
-                System.out.println("Program shouldn't be here");
+                //System.out.println("Program shouldn't be here");
 
             }
         }
@@ -165,16 +163,5 @@ public class ClientHandler extends Thread {
         }
         System.out.println("Ktos hostuje: " + isHosting);
         return isHosting;
-    }
-    private void giveNumberOfPlayers(int nr) {
-        this.numberOfPlayers=nr;
-        for (ClientHandler ch: ServerMain.ar) {
-        ch.numberOfPlayers=nr;
-        }
-    }
-    private void incrementNrOfConnectedPlayers(int connected) {
-        for(ClientHandler ch: ServerMain.ar) {
-            ch.connected=connected;
-        }
     }
 }
