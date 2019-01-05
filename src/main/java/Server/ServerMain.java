@@ -30,7 +30,6 @@ public class ServerMain  {
     static List<Thread> thread_list = new ArrayList<Thread>();
     public static StarBoard board = new StarBoard(121);
     static Vector<ClientHandler> ar = new Vector<>();
-    public static Lobby lobby;
     public static Boolean gameStarted = FALSE;
 
     ServerSocket ss;
