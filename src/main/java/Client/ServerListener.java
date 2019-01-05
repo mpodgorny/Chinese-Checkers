@@ -78,6 +78,8 @@ public class ServerListener extends Thread {
                                 System.out.println("READI");
                                 Platform.runLater(() -> {
                                     FillBoard fb = new FillBoard(nrOfPlayers, primaryStage, color);
+                                    GameServerListener gm = new GameServerListener(input,output,primaryStage,fb);
+
                                 });
                                 } else {
                                 System.out.println("NOT READI");
@@ -91,6 +93,7 @@ public class ServerListener extends Thread {
                         try{nrOfPlayers=input.readInt();}catch(IOException ex) {}
                             Platform.runLater(() -> {
                                 FillBoard fb = new FillBoard(nrOfPlayers, primaryStage, color);
+                                GameServerListener gm = new GameServerListener(input,output,primaryStage,fb);
                             });
 
                     default:

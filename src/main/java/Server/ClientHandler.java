@@ -129,6 +129,7 @@ public class ClientHandler extends Thread {
                             for (ClientHandler ch: ServerMain.ar) {
                                     ch.out.writeUTF("GAME_READY");
                                     ch.out.writeInt(numberOfPlayers);
+                                    GameLogicHandler gh = new GameLogicHandler(this);
 
                             }
                         } else {
