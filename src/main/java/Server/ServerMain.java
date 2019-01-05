@@ -29,7 +29,9 @@ public class ServerMain  {
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
     static List<Thread> thread_list = new ArrayList<Thread>();
     public static StarBoard board = new StarBoard(121);
-    static Vector<ClientHandler> ar = new Vector<>();
+    //static volatile  Vector<ClientHandler> ar = new Vector<>();
+    static volatile List<ClientHandler> ar=new ArrayList<ClientHandler>();
+
     public static Boolean gameStarted = FALSE;
 
     ServerSocket ss;

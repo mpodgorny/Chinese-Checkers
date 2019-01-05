@@ -34,23 +34,24 @@ public class ClientHandler extends Thread {
 
     @Override
     public void run() {
-        while (true){
+        while (true) {
             String input = "";
-            if (gotSignal && numberOfPlayers == sizeOfLobby && sizeOfLobby > 1){
+            if (gotSignal && numberOfPlayers == sizeOfLobby && sizeOfLobby > 1) {
                 try {
                     out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
                     gotSignal = false;
+                    gameControl();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            if(!gotSignal)
-            try {
-                input = in.readUTF();
-                System.out.println("Dostalismy: " + input);
-            } catch (Exception ex) {
-                System.out.println("coś jest nie tak");
-            }
+            if (!gotSignal)
+                try {
+                    input = in.readUTF();
+                    System.out.println("Dostalismy: " + input);
+                } catch (Exception ex) {
+                    System.out.println("coś jest nie tak");
+                }
 
             if (input.equals("GAME_FOR_TWO")) {
                 if (!askIfHosts()) {
@@ -154,14 +155,38 @@ public class ClientHandler extends Thread {
 
     private Boolean askIfHosts() {
         System.out.println("Sprawdzam czy sa hosty.");
-        Boolean isHosting=false;
-        for (ClientHandler ch: ServerMain.ar) {
-        if(ch.isHost){
-            isHosting=true;
-            break;
-        }
+        Boolean isHosting = false;
+        for (ClientHandler ch : ServerMain.ar) {
+            if (ch.isHost) {
+                isHosting = true;
+                break;
+            }
         }
         System.out.println("Ktos hostuje: " + isHosting);
         return isHosting;
+    }
+
+    private static void gameControl() {
+        DataInputStream curIn;
+        DataOutputStream curOut;
+        Boolean isHost;
+        try {
+            for (int i = 0; i < numberOfPlayers; i++) {
+                System.out.println("Jest nas " + numberOfPlayers + " do pieczenia chleba");
+                for (ClientHandler ch : ServerMain.ar) {
+                    System.out.println("rozmiar tej pizdy to " +ar.size());
+                    System.out.println("Teraz rozdaje "+i+" graczowi "+ ch.nick);
+                    ch.out.writeInt(i);
+                    isHost=ch.in.readBoolean();
+                    if (isHost){
+                        System.out.println(ch.nick +" is a host with color nr: " + i);
+                        curIn=ch.in;
+                        curOut=ch.out;
+                    }
+                }
+                System.out.println("I sie rowna na koniec: "+i);
+            if(i==numberOfPlayers-1){i=0;}
+            }
+        } catch (IOException e) {}
     }
 }
