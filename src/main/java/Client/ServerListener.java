@@ -1,11 +1,7 @@
 package Client;
 
 import Client.Board.FillBoard;
-import Client.Board.BoardDraw;
-import Server.ServerMain;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -29,6 +25,8 @@ public class ServerListener extends Thread {
     private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     private Color color;
     private int nrOfPlayers;
+    private int connected=0;
+    private boolean inLobby = false;
 
     public ServerListener(Menu menu) {
         this.menu= menu;
@@ -36,55 +34,74 @@ public class ServerListener extends Thread {
         input = menu.getInStream();
         this.primaryStage=menu.primaryStage;
     }
+        @Override
+        public void run() {
+            String message = "";
+            while (true) {
+                try {
+                    message = input.readUTF();
+                } catch (IOException ex) {
+                }
 
-    @Override
-    public void run() {
-        String message = "";
-        while (true) {
-            try {
-                message = input.readUTF();
-            } catch (IOException ex) {}
+                switch (message) {
 
+                    case "UNABLE":
+                        break;
+                    case "HOST_FOR_TWO":
+                        color = colors[0];
 
-            switch (message) {
+                        break;
 
-                case "UNABLE":
-                    break;
-                case "HOST_FOR_TWO":
-                    LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, ServerMain.lobby);
-                    color = colors[0];
+                    case "HOST_FOR_THREE":
+                        color = colors[0];
+                        break;
 
-                    break;
+                    case "HOST_FOR_FOUR":
+                        color = colors[0];
 
-                case "HOST_FOR_THREE":
+                        break;
 
-                    break;
+                    case "HOST_FOR_SIX":
+                        color = colors[0];
 
-                case "HOST_FOR_FOUR":
-                    color = colors[0];
+                        break;
 
-                    break;
+                    case "CONNECT":
+                        try {
+                            inLobby =true;
+                            color = colors[input.readInt()];
+                            connected = input.readInt();
+                            this.nrOfPlayers = input.readInt();
+                            System.out.println("Color: " + color + "nrOfPlayers: " + nrOfPlayers + " Connected: " + connected);
+                            boolean ifReady = input.readBoolean();
+                            if (ifReady) {
+                                System.out.println("READI");
+                                Platform.runLater(() -> {
+                                    FillBoard fb = new FillBoard(nrOfPlayers, primaryStage, color);
+                                });
+                                } else {
+                                System.out.println("NOT READI");
+                            }
 
-                case "HOST_FOR_SIX":
-                    color = colors[0];
+                        } catch (IOException ex) {
+                        }
 
-                    break;
+                        break;
+                    case "GAME_READY":
+                        try{nrOfPlayers=input.readInt();}catch(IOException ex) {}
+                            Platform.runLater(() -> {
+                                FillBoard fb = new FillBoard(nrOfPlayers, primaryStage, color);
+                            });
 
-                case "CONNECT":
-                    try {
-                        color = colors[input.readInt()];
-                        this.nrOfPlayers = input.readInt();
-                        FillBoard fb = new FillBoard(nrOfPlayers, primaryStage, color);
-                    }catch(IOException ex) {}
+                    default:
+                        break;
 
-                    break;
-
-                default:
-                    break;
-
+                }
             }
+
         }
 
-    }
+    void waitForPlayers(){
 
+    }
 }

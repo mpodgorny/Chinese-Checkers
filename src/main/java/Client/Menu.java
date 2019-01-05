@@ -31,9 +31,9 @@ public class Menu extends AbstractStage {
         this.primaryStage = primaryStage;
         scene.setFill(Color.BLACK);
 
-        final Label label = new Label("Welcome, " + nickname +".\n \b\b\b\bChoose option: ");
+        final Label label = new Label("Welcome, " + nickname +".\n Choose option: ");
         vbox.getChildren().add(label);
-        MenuButtons btns = new MenuButtons(nickname, in, out, primaryStage, socket);
+        MenuButtons btns = new MenuButtons(nickname, in, out, this.primaryStage, socket);
         primaryStage.setTitle("TrylmaAlpha");
         primaryStage.setScene(scene);
         primaryStage.show();

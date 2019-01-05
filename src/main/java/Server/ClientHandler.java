@@ -22,6 +22,7 @@ public class ClientHandler extends Thread {
     ServerMain serverMain;
     private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     public int numberOfPlayers;
+    public static int connected=1;
 
     // Constructor
     public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname, ServerMain serverMain) {
@@ -112,14 +113,30 @@ public class ClientHandler extends Thread {
 
             } else if (input.equals("CONNECT_TO_GAME")) {
                 //dolacz do istniejacej gry
-                if (askIfHosts() && !gameStarted) {
-                    ServerMain.lobby.addPlayer(nick);
+                if (askIfHosts()) {
                     System.out.println("Dołączono do gry");
                     try {
                         out.writeUTF("CONNECT");
-                        try{out.writeInt(colorGiver);}catch(IOException x) {}
+                        connected+=1;
+                        incrementNrOfConnectedPlayers(connected);
+                        try{out.writeInt(colorGiver);
+                            out.writeInt(connected);
+                        } catch(IOException x) {}
                         colorGiver++;
                         out.writeInt(numberOfPlayers);
+                        if(numberOfPlayers==connected) {
+                            out.writeBoolean(true);
+                            for (ClientHandler ch: ServerMain.ar) {
+                                    ch.out.writeUTF("GAME_READY");
+                                    ch.out.writeInt(numberOfPlayers);
+
+                            }
+                        } else {
+                            out.writeBoolean(false);
+
+                        }
+
+
                     } catch (IOException ex) {
                     }
                 } else
@@ -152,6 +169,11 @@ public class ClientHandler extends Thread {
         this.numberOfPlayers=nr;
         for (ClientHandler ch: ServerMain.ar) {
         ch.numberOfPlayers=nr;
+        }
+    }
+    private void incrementNrOfConnectedPlayers(int connected) {
+        for(ClientHandler ch: ServerMain.ar) {
+            ch.connected=connected;
         }
     }
 }

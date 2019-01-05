@@ -1,8 +1,10 @@
 package Client.Board;
 import Client.Players.Opponent;
 import Client.Players.Player;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import static Server.ServerMain.board;
@@ -15,7 +17,6 @@ public class PiecesDraw {
     public PiecesDraw(int playerNumber, GridPane grid, Color color) {
 
         this.color=color;
-        System.out.println("Your Color is: " + color);
         switch (playerNumber) {
             case 2:
                 DrawForTwo(grid);
@@ -68,9 +69,11 @@ public class PiecesDraw {
     }
 
     public void addInfo(GridPane grid) {
-    Label label = new Label("Your color: " + color);
-    grid.setConstraints(label, 0,0);
-    grid.getChildren().add(label);
+        Label label = new Label("Your color");
+        label.setTextFill(color);
+        grid.setConstraints(label,12,16, 50,32);
+        grid.getChildren().add(label);
+
     }
 
 }
