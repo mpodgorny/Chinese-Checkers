@@ -174,7 +174,7 @@ public class ClientHandler extends Thread {
             for (int i = 0; i < numberOfPlayers; i++) {
                 System.out.println("Jest nas " + numberOfPlayers + " do pieczenia chleba");
                 for (ClientHandler ch : ServerMain.ar) {
-                    System.out.println("rozmiar tej pizdy to " +ar.size());
+                    System.out.println("rozmiar tej tablicy to " +ar.size());
                     System.out.println("Teraz rozdaje "+i+" graczowi "+ ch.nick);
                     ch.out.writeInt(i);
                     isHost=ch.in.readBoolean();
@@ -184,7 +184,6 @@ public class ClientHandler extends Thread {
                         curOut=ch.out;
                     }
                 }
-                System.out.println("I sie rowna na koniec: "+i);
             if(i==numberOfPlayers-1){i=0;}
             }
         } catch (IOException e) {}
