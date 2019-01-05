@@ -123,8 +123,18 @@ public class ServerListener extends Thread {
                 System.out.println("to ja gram teraz)");
                     output.writeBoolean(true);
 
-                } else
+                    System.out.println("Gram ja. Wykonuje ruch.... (czekam 4s)");
+                    try{sleep(4000);}catch(InterruptedException ex){}
+                } else {
                     output.writeBoolean(false);
+
+                    System.out.println("Gra ktoś inny... (czekam 4s)");
+                    try {
+                        sleep(4000);
+                    } catch (InterruptedException ex) {
+                    }
+                }
+
 
             } catch (IOException ex) {}
 
