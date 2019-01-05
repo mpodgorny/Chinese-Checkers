@@ -11,12 +11,14 @@ import static javafx.scene.paint.Color.*;
 
 
 public class PiecesDraw {
-    static List<Player> players = new ArrayList<Player>();
+    private List<Player> players = new ArrayList<Player>();
     private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     Color color;
-    public PiecesDraw(int playerNumber, GridPane grid, Color color) {
+    private StarBoard board;
+    public PiecesDraw(int playerNumber, GridPane grid, Color color, StarBoard board) {
 
         this.color=color;
+        this.board = board;
         switch (playerNumber) {
             case 2:
                 DrawForTwo(grid);
@@ -36,8 +38,8 @@ public class PiecesDraw {
     }
 
     public void DrawForTwo(GridPane grid) {
-        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid, "HOME_MIDDLE_TOP");
-        Player op1 = new Player(colors[1],"HOME_MIDDLE_TOP",grid, "HOME_MIDDLE_DOWN");
+        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid, "HOME_MIDDLE_TOP", board);
+        Player op1 = new Player(colors[1],"HOME_MIDDLE_TOP",grid, "HOME_MIDDLE_DOWN", board);
         players.add(pl);
         players.add(op1);
 
@@ -45,9 +47,9 @@ public class PiecesDraw {
     }
 
     public void DrawForThree (GridPane grid) {
-        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid, "HOME_MIDDLE_TOP");
-        Player op1 = new Player(colors[1],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN");
-        Player op2 = new Player(colors[2],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN");
+        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid, "HOME_MIDDLE_TOP", board);
+        Player op1 = new Player(colors[1],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN", board);
+        Player op2 = new Player(colors[2],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN", board);
         players.add(pl);
         players.add(op1);
         players.add(op2);
@@ -56,10 +58,10 @@ public class PiecesDraw {
     }
 
     public void DrawForFour (GridPane grid) {
-        Player pl = new Player(colors[0], "HOME_LEFT_DOWN", grid,"HOME_RIGHT_TOP");
-        Player op1 = new Player(colors[1],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN");
-        Player op2 = new Player(colors[2],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN");
-        Player op3 = new Player(colors[3],"HOME_RIGHT_DOWN",grid,"HOME_LEFT_TOP");
+        Player pl = new Player(colors[0], "HOME_LEFT_DOWN", grid,"HOME_RIGHT_TOP", board);
+        Player op1 = new Player(colors[1],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN", board);
+        Player op2 = new Player(colors[2],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN", board);
+        Player op3 = new Player(colors[3],"HOME_RIGHT_DOWN",grid,"HOME_LEFT_TOP", board);
         players.add(pl);
         players.add(op1);
         players.add(op2);
@@ -68,12 +70,12 @@ public class PiecesDraw {
     }
 
     public void DrawForSix (GridPane grid) {
-        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid,"HOME_MIDDLE_TOP");
-        Player op1 = new Player(colors[1],"HOME_MIDDLE_TOP",grid,"HOME_MIDDLE_DOWN");
-        Player op2 = new Player(colors[2],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN");
-        Player op3 = new Player(colors[3],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN");
-        Player op4 = new Player(colors[4],"HOME_LEFT_DOWN",grid,"HOME_RIGHT_TOP");
-        Player op5 = new Player(colors[5],"HOME_RIGHT_DOWN",grid,"HOME_LEFT_TOP");
+        Player pl = new Player(colors[0], "HOME_MIDDLE_DOWN", grid,"HOME_MIDDLE_TOP", board);
+        Player op1 = new Player(colors[1],"HOME_MIDDLE_TOP",grid,"HOME_MIDDLE_DOWN", board);
+        Player op2 = new Player(colors[2],"HOME_LEFT_TOP",grid,"HOME_RIGHT_DOWN", board);
+        Player op3 = new Player(colors[3],"HOME_RIGHT_TOP",grid,"HOME_LEFT_DOWN", board);
+        Player op4 = new Player(colors[4],"HOME_LEFT_DOWN",grid,"HOME_RIGHT_TOP", board);
+        Player op5 = new Player(colors[5],"HOME_RIGHT_DOWN",grid,"HOME_LEFT_TOP", board);
         players.add(pl);
         players.add(op1);
         players.add(op2);
@@ -91,4 +93,17 @@ public class PiecesDraw {
 
     }
 
+    public void drawPieces(){
+        for(int i=0 ; i<players.size(); i++){
+            players.get(i).fillHome();
+        }
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> players) {
+        this.players = players;
+    }
 }

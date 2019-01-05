@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Board.FillBoard;
+import Client.Board.StarBoard;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -26,6 +27,8 @@ public class ServerListener extends Thread {
     private static volatile int sizeOfLobby;
     private String tempString;
     private static volatile int colorIndex;
+    private StarBoard board;
+
     public ServerListener(Menu menu) {
         this.menu= menu;
         output = menu.getOutStream();
@@ -94,8 +97,9 @@ public class ServerListener extends Thread {
                 case "START_GAME":
                     tempString = String.format("%c", message.charAt(10));
                     sizeOfLobby = Integer.parseInt(tempString);
+                    board = new StarBoard(37);
                     Platform.runLater(() -> {
-                        FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex-1]);
+                        FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex-1], board);
                     });
                     break;
 

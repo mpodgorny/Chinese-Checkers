@@ -1,25 +1,29 @@
 package Client.Players;
 
 import Client.Board.Piece;
+import Client.Board.StarBoard;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-
-import static Server.ServerMain.board;
 
 public class Player {
 
     private Piece[] pieces = new Piece[10];
     public String goalHouse;
     Color color;
+    private boolean ifWon = false;
+    private StarBoard board;
+    String type;
+    GridPane grid;
 
-    public Player(Color color, String type, GridPane grid, String goalHouse){
-        this.goalHouse=goalHouse;
-        this.color=color;
-        fillHome(type,grid,color);
-
+    public Player(Color color, String type, GridPane grid, String goalHouse, StarBoard board){
+        this.goalHouse = goalHouse;
+        this.color = color;
+        this.type = type;
+        this.grid = grid;
+        this.board = board;
     }
 
-    private void fillHome(String type, GridPane grid, Color color){
+    public void fillHome(){
         int count=0;
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
@@ -32,4 +36,19 @@ public class Player {
         }
     }
 
+    public boolean isIfWon() {
+        return ifWon;
+    }
+
+    public void setIfWon(boolean ifWon) {
+        this.ifWon = ifWon;
+    }
+
+    public StarBoard getBoard() {
+        return board;
+    }
+
+    public void setBoard(StarBoard board) {
+        this.board = board;
+    }
 }
