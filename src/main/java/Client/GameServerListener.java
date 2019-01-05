@@ -1,7 +1,10 @@
 package Client;
 
 import Client.Board.FillBoard;
+import Client.Board.Piece;
+import Client.Board.Tile;
 import Client.Players.Player;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import javax.imageio.IIOException;
@@ -15,39 +18,83 @@ public class GameServerListener {
     DataOutputStream out;
     Stage primaryStage;
     FillBoard fb;
+    Tile tempTile;
+    int numberOfPlayers;
+    Color color;
 
-    public GameServerListener(DataInputStream in, DataOutputStream out, Stage primaryStage, FillBoard fb) {
+
+    public GameServerListener(DataInputStream in, DataOutputStream out, FillBoard fb, int numberOfPlayers) {
+        System.out.println("Tworze game serrver Listener");
         this.in=in;
         this.out=out;
         this.primaryStage=primaryStage;
         this.fb=fb;
-        PlayGame();
+        this.numberOfPlayers=numberOfPlayers;
+        PlayGame(numberOfPlayers);
+        this.color=fb.color;
     }
 
-    public void PlayGame(){
+    public void PlayGame(int numberOfPlayers){
 
-        while(true){
-            String command ="";
-            try{command =in.readUTF();}catch(IOException ex){}
-            switch(command){
-                case "COS":
+        switch(numberOfPlayers){
+            case 2:
+                System.out.println("Gra dla 2 sie rozpoczela.");
 
-                    break;
+                break;
+            case 3:
 
-                    default:
+                break;
+            case 4:
 
-                        break;
-            }
+                break;
+            case 6:
 
-
-
-
-
-
-
+                break;
         }
 
     }
 
+    public void gameForTwo(){
+        int nrCurrentColor = 0;
+        while(true) {
+            try {
+                nrCurrentColor = in.read();
+            } catch (IOException e) {
+            }
+            switch (nrCurrentColor) {
+                case 0:
+            }
+        }
+    }
+
+    public void gameForThree() {
+
+    }
+
+    public void gameForFour() {
+
+    }
+
+    public void gameForSix(){
+
+
+    }
+
+
+
+
+
+    public static Piece chosenPiece(Piece piece){
+
+        return piece;
+    }
+    public  Tile chosenTile(Tile tile) {
+        this.tempTile=tile;
+        return tile;
+    }
+    public void move(Piece piece){
+        fb.grid.setConstraints(piece,tempTile.column,tempTile.row);
+
+    }
 
 }

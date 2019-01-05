@@ -9,12 +9,13 @@ import static Server.ServerMain.board;
 public class Player {
 
     private Piece[] pieces = new Piece[10];
-    private String nick;
+    public String goalHouse;
+    Color color;
 
-
-    public Player(Color color, String type, GridPane grid){
+    public Player(Color color, String type, GridPane grid, String goalHouse){
+        this.goalHouse=goalHouse;
+        this.color=color;
         fillHome(type,grid,color);
-        this.nick=nick;
 
     }
 
@@ -23,7 +24,7 @@ public class Player {
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].getTypeOfTile().equals(type)) {
-                    GridPane.setConstraints(this.pieces[count] = new Piece(color,j,i), j, i);
+                    GridPane.setConstraints(this.pieces[count] = new Piece(goalHouse, color,j,i), j, i);
                     grid.getChildren().add(this.pieces[count]);
                     count++;
                 }

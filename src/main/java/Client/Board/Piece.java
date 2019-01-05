@@ -1,5 +1,8 @@
 package Client.Board;
 
+import Client.GameServerListener;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -10,13 +13,13 @@ import static Client.Board.StarBoard.TILE_RADIUS;
 public class Piece extends StackPane {
 
     static private final double PIECE_SIZE = TILE_RADIUS*0.75;
-    private double mouseX, mouseY;
-    private double oldX, oldY;
-    public int X, Y;
+    public int column, row;
     private Color color;
-
-    public Piece(Color color, int x, int y) {
-
+    private String goalHouse;
+    public Piece(String goalHouse, Color color, int x, int y) {
+        this.goalHouse=goalHouse;
+        this.column=x;
+        this.row=y;
         this.color=color;
         Circle piece = new Circle();
         piece.setStroke(Color.RED);
@@ -27,23 +30,17 @@ public class Piece extends StackPane {
         piece.setStrokeWidth(TILE_RADIUS * 0.06);
         piece.isSmooth();
 
-        setOnMousePressed(e -> {
-            mouseX = e.getSceneX();
-            mouseY = e.getSceneY();
-        });
-        setOnMouseDragged(e -> {
-            relocate(e.getSceneX() - mouseX + oldX, e.getSceneY() - mouseY + oldY);
+        setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent t) {
+                System.out.println("clicked col: " + column + " row: " +row);
+            }
         });
         getChildren().add(piece);
     }
-    public double getOldX() {
-        return oldX;
-    }
-
-    public double getOldY() {
-        return oldY;
-    }
-
+    public int getColumn(){return column;}
+    public int getRow(){return row;}
     public Color getColor(){return this.color;}
+    public Piece chosenPiece(){return this;}
 
 }

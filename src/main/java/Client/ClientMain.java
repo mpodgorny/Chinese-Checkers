@@ -12,8 +12,6 @@ public class ClientMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //FillBoard fb = new FillBoard(2,primaryStage);
-        //BoardDraw bd = new BoardDraw(primaryStage, ServerMain.board);
         StartUpMenu start = new StartUpMenu(primaryStage);
     }
 
