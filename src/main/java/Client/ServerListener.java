@@ -19,20 +19,20 @@ import static javafx.scene.paint.Color.CHOCOLATE;
 public class ServerListener extends Thread {
 
     private Menu menu;
-    private DataOutputStream output;
-    private DataInputStream input;
+    private static DataOutputStream output;
+    private static DataInputStream input;
     private boolean Disconnected;
-    private boolean isHosting=false;
-    private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
+    private boolean isHosting = false;
+    private static final Color[] colors = new Color[]{BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     private static volatile int sizeOfLobby;
     private String tempString;
     private static volatile int colorIndex;
     private StarBoard board;
 
     public ServerListener(Menu menu) {
-        this.menu= menu;
-        output = menu.getOutStream();
-        input = menu.getInStream();
+        this.menu = menu;
+        this.output = menu.getOutStream();
+        this.input = menu.getInStream();
     }
 
     @Override
@@ -41,17 +41,17 @@ public class ServerListener extends Thread {
         while (true) {
             try {
                 message = input.readUTF();
-            } catch (IOException ex) {}
+            } catch (IOException ex) {
+            }
 
 
-            switch(message.replace("1", "")
-                    .replace("2","")
-                    .replace("3","")
-                    .replace("4","")
-                    .replace("5","")
-                    .replace("6","")){
+            switch (message.replace("1", "")
+                    .replace("2", "")
+                    .replace("3", "")
+                    .replace("4", "")
+                    .replace("5", "")
+                    .replace("6", "")) {
                 case "UNABLE":
-                 System.out.println("i znowu");
                     break;
                 case "HOST_FOR_TWO":
                     sizeOfLobby = 2;
@@ -99,8 +99,9 @@ public class ServerListener extends Thread {
                     sizeOfLobby = Integer.parseInt(tempString);
                     board = new StarBoard(37);
                     Platform.runLater(() -> {
-                        FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex-1], board);
+                        FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
                     });
+                    gameControl();
                     break;
 
                 default:
@@ -111,4 +112,22 @@ public class ServerListener extends Thread {
 
     }
 
+    private static void gameControl() {
+        int curColorPlaying = 0;
+        while (true) {
+            try {
+                System.out.println("Pytam o nr koloru");
+                curColorPlaying = input.readInt();
+                System.out.println("dostalem kolor nr: " + curColorPlaying);
+                if (curColorPlaying == colorIndex){
+                System.out.println("to ja gram teraz)");
+                    output.writeBoolean(true);
+
+                } else
+                    output.writeBoolean(false);
+
+            } catch (IOException ex) {}
+
+        }
+    }
 }
