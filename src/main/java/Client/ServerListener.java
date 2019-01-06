@@ -58,7 +58,7 @@ public class ServerListener extends Thread {
                     sizeOfLobby = 2;
                     colorIndex = 1;
                     Platform.runLater(() -> {
-                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage);
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "Waiting for other players...");
                     });
                     break;
 
@@ -66,7 +66,7 @@ public class ServerListener extends Thread {
                     sizeOfLobby = 3;
                     colorIndex = 1;
                     Platform.runLater(() -> {
-                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage);
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "Waiting for other players...");
                     });
                     break;
 
@@ -74,7 +74,7 @@ public class ServerListener extends Thread {
                     sizeOfLobby = 4;
                     colorIndex = 1;
                     Platform.runLater(() -> {
-                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage);
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "Waiting for other players...");
                     });
                     break;
 
@@ -82,7 +82,7 @@ public class ServerListener extends Thread {
                     sizeOfLobby = 6;
                     colorIndex = 1;
                     Platform.runLater(() -> {
-                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage);
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "Waiting for other players...");
                     });
                     break;
 
@@ -90,7 +90,7 @@ public class ServerListener extends Thread {
                     tempString = String.format("%c", message.charAt(7));
                     colorIndex = Integer.parseInt(tempString);
                     Platform.runLater(() -> {
-                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage);
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "Waiting for other players...");
                     });
 
                     break;
@@ -102,7 +102,12 @@ public class ServerListener extends Thread {
                     Platform.runLater(() -> {
                         FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
                     });
-                    gameControl();
+                    try {
+                        startedGameService();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    //gameControl();
                     //waitForMove();
                     break;
 
@@ -113,63 +118,17 @@ public class ServerListener extends Thread {
         }
 
     }
-    //pozostałosci poprzednich pomysłów, zostaje póki co na wzór dla potomnych
-    private static void gameControlOldVersion() {
-        int curColorPlaying = 0;
-        while (true) {
-            try {
-                System.out.println("Pytam o nr koloru");
-                curColorPlaying = input.readInt();
-                System.out.println("dostalem kolor nr: " + curColorPlaying);
-                if (curColorPlaying == colorIndex){
-                System.out.println("to ja gram teraz)");
-                    output.writeBoolean(true);
-
-                    System.out.println("Gram ja. Wykonuje ruch.... (czekam 4s)");
-                    try{sleep(4000);}catch(InterruptedException ex){}
-                } else {
-                    output.writeBoolean(false);
-
-                    System.out.println("Gra ktoś inny... (czekam 4s)");
-                    try {
-                        sleep(4000);
-                    } catch (InterruptedException ex) {
-                    }
-                }
-
-
-            } catch (IOException ex) {}
-
-        }
-    }
-
-    private void gameControl() {
-        int temp=colorIndex-1;
-        System.out.println("Moj kolor index to: "+temp);
-        for (int i = 0; i < sizeOfLobby; i++) {
-            if (i == temp) {
-                try { sleep(2000); } catch (InterruptedException ex) { }
-                try {
-                    output.writeUTF("RUSZAM SIE JA, + " + temp);
-                    System.out.println("ruszam sie ja!");
-
-                } catch (IOException e) {}
-            } else{
-            try {
-                System.out.println("Dostalem wiadomosc: "+input.readUTF());
-                output.writeBoolean(true);
-            } catch (IOException x) {}
-        }
-            if(i==sizeOfLobby-1){i=-1;}
-        }
-    }
-
 
     private void waitForMove(){
         boolean runTUDUDUDU = true;
         while(runTUDUDUDU){
             if(MoveControl.isMoveDone())
-                runTUDUDUDU = false;
+                if(MoveControl.getMove().split("-")[0].equals(colors[colorIndex-1].toString())) {
+                    runTUDUDUDU = false;
+                } else {
+                    System.out.println("Wrong color");
+                    MoveControl.setMoveDone(false);
+                }
             else {
                 try {
                     Thread.sleep(250);
@@ -178,32 +137,32 @@ public class ServerListener extends Thread {
                 }
             }
         }
-        System.out.println("Może byś coś zrobił tępy chuju");
-        board = makeMove(MoveControl.getMove());
-        Platform.runLater(() -> {
-            JustDraw justDraw = new JustDraw(board, menu.primaryStage);
-        });
-        System.out.println("ty w ogóle masz jakąś pasję?");
-    }
-
-    private StarBoard makeMove(String move){
-        StarBoard starBoard = board;
-        String[] components = move.split("-");
-        String[] startCords = components[1].split(":");
-        String[] endCords = components[2].split(":");
-        int startColumn = Integer.parseInt(startCords[0]);
-        int startRow = Integer.parseInt(startCords[1]);
-        int endColumn = Integer.parseInt(endCords[0]);
-        int endRow = Integer.parseInt(endCords[1]);
-
-        Piece tempPiece = starBoard.getBoard()[startColumn][startRow].getPiece();
-        starBoard.getBoard()[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow));
-        starBoard.getBoard()[startColumn][startRow].dropPiece();
-
-        return starBoard;
     }
 
     public static StarBoard getBoard() {
         return board;
+    }
+
+    public void startedGameService() throws IOException {
+        while(true){
+            String message = input.readUTF();
+            if(message.equals("YOUR_TURN")){
+                boolean moveCorrect = false;
+                while(!moveCorrect){
+                    MoveControl.setMoveDone(false);
+                    MoveControl.setMove(null);
+                    waitForMove();
+                    String move = MoveControl.getMove();
+                    System.out.println(move);
+                    output.writeUTF(move);
+                    moveCorrect = input.readBoolean();
+                }
+            }else{
+                board.makeMove(message);
+                Platform.runLater(() -> {
+                    JustDraw justDraw = new JustDraw(board, menu.primaryStage);
+                });
+            }
+        }
     }
 }

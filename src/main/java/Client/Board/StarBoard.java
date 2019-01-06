@@ -99,7 +99,7 @@ public class StarBoard {
     public void simpleCheck(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
-                if(board[j][i].getTypeOfTile()=="HOME")
+                if(board[j][i].getTypeOfTile().contains("HOME"))
                     System.out.print("o");
                 else if(board[j][i].getTypeOfTile()=="MIDDLE")
                     System.out.print("x");
@@ -108,6 +108,20 @@ public class StarBoard {
             }
             System.out.println();
         }
+    }
+
+    public void makeMove(String move){
+        String[] components = move.split("-");
+        String[] startCords = components[1].split(":");
+        String[] endCords = components[2].split(":");
+        int startColumn = Integer.parseInt(startCords[0]);
+        int startRow = Integer.parseInt(startCords[1]);
+        int endColumn = Integer.parseInt(endCords[0]);
+        int endRow = Integer.parseInt(endCords[1]);
+
+        Piece tempPiece = board[startColumn][startRow].getPiece();
+        board[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow));
+        board[startColumn][startRow].dropPiece();
     }
 
     public int getHeight() {
