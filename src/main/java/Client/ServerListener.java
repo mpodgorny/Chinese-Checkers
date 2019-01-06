@@ -33,6 +33,7 @@ public class ServerListener extends Thread {
         this.menu = menu;
         this.output = menu.getOutStream();
         this.input = menu.getInStream();
+        System.out.println("moj nick to: "+menu.nickname);
     }
 
     @Override
@@ -101,8 +102,8 @@ public class ServerListener extends Thread {
                     Platform.runLater(() -> {
                         FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
                     });
-                    //gameControl();
-                    waitForMove();
+                    gameControl();
+                    //waitForMove();
                     break;
 
                 default:
@@ -112,8 +113,8 @@ public class ServerListener extends Thread {
         }
 
     }
-
-    private static void gameControl() {
+    //pozostałosci poprzednich pomysłów, zostaje póki co na wzór dla potomnych
+    private static void gameControlOldVersion() {
         int curColorPlaying = 0;
         while (true) {
             try {
@@ -141,6 +142,28 @@ public class ServerListener extends Thread {
 
         }
     }
+
+    private void gameControl() {
+        int temp=colorIndex-1;
+        System.out.println("Moj kolor index to: "+temp);
+        for (int i = 0; i < sizeOfLobby; i++) {
+            if (i == temp) {
+                try { sleep(2000); } catch (InterruptedException ex) { }
+                try {
+                    output.writeUTF("RUSZAM SIE JA, + " + temp);
+                    System.out.println("ruszam sie ja!");
+
+                } catch (IOException e) {}
+            } else{
+            try {
+                System.out.println("Dostalem wiadomosc: "+input.readUTF());
+                output.writeBoolean(true);
+            } catch (IOException x) {}
+        }
+            if(i==sizeOfLobby-1){i=-1;}
+        }
+    }
+
 
     private void waitForMove(){
         boolean runTUDUDUDU = true;
