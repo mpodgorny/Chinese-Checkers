@@ -24,6 +24,7 @@ public class ClientHandler extends Thread {
     private static volatile int numberOfPlayers;
     private boolean gotSignal = false;
     int colorNumber;
+    public static volatile boolean gameStarted = false;
 
     // Constructor
     public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname, ServerMain serverMain) {
@@ -42,12 +43,16 @@ public class ClientHandler extends Thread {
                 try {
                     out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
                     gotSignal = false;
-                    if (iAmHosting) {
+                    gameStarted = true;
+                    while(true) {
+                        int i=0;
+                    }
+                    /*if (iAmHosting) {
                         System.out.println(nick + " is hosting the game.\nStarting!\n");
                         //Thread t = new GameControl(serverMain, numberOfPlayers);
                         //t.start();
-                        gamePlaying();
-                    } else System.out.println("cos");gamePlaying();
+                        //gamePlaying();
+                    } else System.out.println("cos");//gamePlaying();*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

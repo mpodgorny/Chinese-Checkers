@@ -15,8 +15,8 @@ public class LobbyDraw {
         primaryStage.show();
     }
 
-    public LobbyDraw(Stage primaryStage){
-        Scene scene = new Scene(oneLabel());
+    public LobbyDraw(Stage primaryStage, String message){
+        Scene scene = new Scene(oneLabel(message));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -32,9 +32,9 @@ public class LobbyDraw {
         return vBox;
     }
 
-    private VBox oneLabel(){
+    private VBox oneLabel(String message){
         VBox vBox = new VBox(10);
-        Label label = new Label("Waiting for other players...");
+        Label label = new Label(message);
         vBox.getChildren().add(label);
         vBox.setPadding(new Insets(20, 20, 20, 20));
         vBox.setAlignment(Pos.CENTER);

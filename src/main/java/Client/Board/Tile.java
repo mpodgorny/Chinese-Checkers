@@ -36,10 +36,8 @@ public class Tile extends Circle {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                //System.out.println("clicked col: " + column + " row: " +row);
                 MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
-                System.out.println(MoveControl.getMove());
-                System.out.println(column + " " + row);
+                MoveControl.setMoveDone(true);
             }
         });
 
@@ -57,10 +55,8 @@ public class Tile extends Circle {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                //System.out.println("clicked col: " + column + " row: " +row);
                 MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
                 MoveControl.setMoveDone(true);
-                System.out.println(column + " " + row);
             }
         });
     }

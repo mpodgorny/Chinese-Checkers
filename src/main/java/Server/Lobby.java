@@ -11,12 +11,6 @@ public class Lobby {
         this.numberOfPlayers = numberOfPlayers;
     }
 
-    public void addPlayer(String player) {
-        nicknames.add(player);
-        if (numberOfPlayers == nicknames.size())
-            ServerMain.startGame();
-    }
-
     public int getNumberOfPlayers() {
         return numberOfPlayers;
     }

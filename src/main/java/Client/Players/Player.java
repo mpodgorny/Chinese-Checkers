@@ -25,12 +25,20 @@ public class Player {
         drawPieces(this.grid);
     }
 
+    public Player(Color color, String type, String goalHouse, StarBoard board){
+        this.color = color;
+        this.type = type;
+        this. goalHouse = goalHouse;
+        this.board = board;
+        fillHome();
+    }
+
     public void fillHome(){
         int count=0;
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].getTypeOfTile().equals(type)) {
-                    this.pieces[count] = new Piece(goalHouse, color,j,i);
+                    this.pieces[count] = new Piece(goalHouse, color,j,i, board);
                     count++;
                 }
             }
@@ -43,7 +51,6 @@ public class Player {
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].hasPieceOfColor(color)) {
                     GridPane.setConstraints(this.pieces[count] = board.getBoard()[j][i].getPiece(), j, i);
-                    //System.out.println("to ile razy się wypierdolę tym razem? (" + color + " --- " + j + " : " + i + ")");
                     try {
                         grid.getChildren().add(this.pieces[count]);
                     }catch(IllegalArgumentException iax){

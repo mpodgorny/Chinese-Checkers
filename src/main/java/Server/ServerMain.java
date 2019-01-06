@@ -1,8 +1,10 @@
 package Server;
 
 
-import Client.Board.StarBoard;
+import Client.Board.*;
 import Client.ServerListener;
+import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
 
 import javax.sound.sampled.Port;
 import javax.xml.crypto.Data;
@@ -28,7 +30,6 @@ public class ServerMain  {
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
     static ArrayList<Thread> thread_list = new ArrayList<Thread>();
-    public static StarBoard board = new StarBoard(121);
     static volatile ArrayList<ClientHandler> ar=new ArrayList<ClientHandler>();
 
     public static Boolean gameStarted = FALSE;
@@ -49,6 +50,7 @@ public class ServerMain  {
 
     public static void main(String[] args) throws IOException{
         server = new ServerMain();
+        int i=0;
         while (true)
         {
             Socket s = null;
@@ -70,6 +72,19 @@ public class ServerMain  {
             catch (Exception e){
                 s.close();
                 e.printStackTrace();
+            }
+            if(ClientHandler.gameStarted == true){
+                startGame();
+            }
+            if(thread_list.size()>1){
+                while (!ClientHandler.gameStarted){
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                startGame();
             }
         }
     }
@@ -127,8 +142,53 @@ public class ServerMain  {
         return clientHandler;
     }
 
-    public static void startGame(){
-        gameStarted = true;
-        System.out.println("Game started yay");
+    public static void startGame() throws IOException {
+        StarBoard board = new StarBoard(121);
+        PiecesDraw piecesDraw = new PiecesDraw(2, board);
+        int i=0;
+        while(true){
+            String move="";
+            ClientHandler ch = ar.get(i);
+            ch.out.writeUTF("YOUR_TURN");
+            boolean moveDone = false;
+            while(!moveDone){
+                move = ch.in.readUTF();
+                System.out.println(move);
+                boolean moveCorrect = MoveChecks.fullCheck(move, board);
+                ch.out.writeBoolean(moveCorrect);
+                if(moveCorrect){
+                    moveDone = true;
+                    board = makeMove(move, board);
+                }
+            }
+            for(int j=0; j<ar.size(); j++){
+                ar.get(j).out.writeUTF(move);
+            }
+            if(i==ar.size()-1)
+                i=0;
+            else
+                i++;
+        }
+    }
+
+    private static StarBoard makeMove(String move, StarBoard board){
+        StarBoard starBoard = board;
+        String[] components = move.split("-");
+        String[] startCords = components[1].split(":");
+        String[] endCords = components[2].split(":");
+        int startColumn = Integer.parseInt(startCords[0]);
+        int startRow = Integer.parseInt(startCords[1]);
+        int endColumn = Integer.parseInt(endCords[0]);
+        int endRow = Integer.parseInt(endCords[1]);
+
+        Piece tempPiece = starBoard.getBoard()[startColumn][startRow].getPiece();
+        starBoard.getBoard()[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow, board));
+        starBoard.getBoard()[startColumn][startRow].dropPiece();
+
+        return starBoard;
+    }
+
+    private static void upośledzonaMetodaBoNieMamCzasuRozdzielaćKlas(StarBoard board){
+
     }
 }
