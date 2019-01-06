@@ -39,6 +39,7 @@ public class Tile extends Circle {
                 //System.out.println("clicked col: " + column + " row: " +row);
                 MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
                 System.out.println(MoveControl.getMove());
+                System.out.println(column + " " + row);
             }
         });
 
@@ -59,6 +60,7 @@ public class Tile extends Circle {
                 //System.out.println("clicked col: " + column + " row: " +row);
                 MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
                 MoveControl.setMoveDone(true);
+                System.out.println(column + " " + row);
             }
         });
     }
@@ -86,6 +88,12 @@ public class Tile extends Circle {
                 return true;
         }catch(NullPointerException npex){
         }
+        return false;
+    }
+
+    public boolean hasPiece(){
+        if(piece != null)
+            return true;
         return false;
     }
 }

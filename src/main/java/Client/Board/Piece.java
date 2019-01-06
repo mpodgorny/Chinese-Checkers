@@ -39,6 +39,7 @@ public class Piece extends StackPane {
             public void handle(MouseEvent t) {
                 MoveControl.setMove(String.format("%s-%d:%d-", color.toString(), column, row));
                 MoveControl.setMoveDone(false);
+                System.out.println(column + " " + row);
             }
         });
         getChildren().add(piece);
