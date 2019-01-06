@@ -1,8 +1,5 @@
 package Server;
 
-import Client.Board.MoveControl;
-import Client.Board.StarBoard;
-
 import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
@@ -21,10 +18,12 @@ public class ClientHandler extends Thread {
     String nick;
     static Boolean isHost = false;
     int typeOfGame;
+    private Boolean iAmHosting = false;
     ServerMain serverMain;
     private static volatile int sizeOfLobby;
     private static volatile int numberOfPlayers;
     private boolean gotSignal = false;
+    int colorNumber;
 
     // Constructor
     public ClientHandler(Socket s, DataInputStream in, DataOutputStream out, String nickname, ServerMain serverMain) {
@@ -43,7 +42,12 @@ public class ClientHandler extends Thread {
                 try {
                     out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
                     gotSignal = false;
-                    //gameControl();
+                    if (iAmHosting) {
+                        System.out.println(nick + " is hosting the game.\nStarting!\n");
+                        //Thread t = new GameControl(serverMain, numberOfPlayers);
+                        //t.start();
+                        gamePlaying();
+                    } else System.out.println("cos");gamePlaying();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -63,8 +67,10 @@ public class ClientHandler extends Thread {
                     try {
                         out.writeUTF("HOST_FOR_TWO");
                         gotSignal = true;
+                        iAmHosting = true;
                         numberOfPlayers = 1;
                         sizeOfLobby = 2;
+                        this.colorNumber=0;
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -83,9 +89,11 @@ public class ClientHandler extends Thread {
                     System.out.println("Hostuj gre dla trzech");
                     try {
                         out.writeUTF("HOST_FOR_THREE");
+                        iAmHosting = true;
                         numberOfPlayers = 1;
                         sizeOfLobby = 3;
                         gotSignal = true;
+                        this.colorNumber=0;
                     } catch (IOException ex) {
                     }
                 } else
@@ -101,9 +109,11 @@ public class ClientHandler extends Thread {
                     System.out.println("Hostuj gre dla czterech");
                     try {
                         out.writeUTF("HOST_FOR_FOUR");
+                        iAmHosting = true;
                         numberOfPlayers = 1;
                         sizeOfLobby = 4;
                         gotSignal = true;
+                        this.colorNumber=0;
                     } catch (IOException ex) {
                     }
                 } else
@@ -119,9 +129,11 @@ public class ClientHandler extends Thread {
                     System.out.println("Hostuj gre dla szesciu");
                     try {
                         out.writeUTF("HOST_FOR_SIX");
+                        iAmHosting = true;
                         numberOfPlayers = 1;
                         sizeOfLobby = 6;
                         gotSignal = true;
+                        this.colorNumber=0;
                     } catch (IOException ex) {
                     }
                 } else
@@ -137,6 +149,7 @@ public class ClientHandler extends Thread {
 
                     System.out.println("Dołączono do gry");
                     try {
+                        this.colorNumber=numberOfPlayers;
                         numberOfPlayers++;
                         out.writeUTF("CONNECT" + numberOfPlayers);
                         gotSignal = true;
@@ -169,25 +182,27 @@ public class ClientHandler extends Thread {
         return isHosting;
     }
 
-    private static void gameControl() {
-        DataInputStream curIn;
-        DataOutputStream curOut;
-        Boolean isHost;
-        try {
+    private void gamePlaying() {
+        while (true) {
             for (int i = 0; i < numberOfPlayers; i++) {
-                System.out.println("\ni rowna sie: "+i);
-                for (ClientHandler ch : ServerMain.ar) {
-                    System.out.println("Teraz rozdaje "+i+" graczowi "+ ch.nick);
-                    ch.out.writeInt(i);
-                    isHost=ch.in.readBoolean();
-                    if (isHost){
-                        System.out.println(ch.nick +" is a host with color nr: " + i);
-                        curIn=ch.in;
-                        curOut=ch.out;
+                try{
+                    System.out.println(i+" to aktualne i.Moj kolor i nick to: " +colorNumber +" "+ nick);
+                    if(i==colorNumber) {
+                        System.out.println("Gracz " + nick +" wykonuje ruch");
+                        String msg = ar.get(i).in.readUTF();
+                        System.out.println("Dostalem " + msg);
+                        for (int j = 0; j < numberOfPlayers; j++) {
+                            if (j != i) ar.get(j).out.writeUTF(msg);
+                        }
+                    }else {
+                        in.readBoolean();
                     }
-                }
-            if(i==numberOfPlayers-1){i=-1;}
+                } catch (IOException e){}
+                if(i==numberOfPlayers-1){i=-1;}
             }
-        } catch (IOException e) {}
+
+        }
     }
+
+
 }

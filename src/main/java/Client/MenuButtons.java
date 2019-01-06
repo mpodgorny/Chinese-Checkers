@@ -39,7 +39,6 @@ public class MenuButtons extends AbstractStage{
             @Override
             public void handle(ActionEvent event) {
                 try { out.writeUTF("GAME_FOR_TWO");} catch (Exception ex) {}
-                System.out.println("powtarzam!");
             }
         });
         return btn;

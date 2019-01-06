@@ -43,7 +43,7 @@ public class Player {
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].hasPieceOfColor(color)) {
                     GridPane.setConstraints(this.pieces[count] = board.getBoard()[j][i].getPiece(), j, i);
-                    System.out.println("to ile razy się wypierdolę tym razem? (" + color + " --- " + j + " : " + i + ")");
+                    //System.out.println("to ile razy się wypierdolę tym razem? (" + color + " --- " + j + " : " + i + ")");
                     try {
                         grid.getChildren().add(this.pieces[count]);
                     }catch(IllegalArgumentException iax){
