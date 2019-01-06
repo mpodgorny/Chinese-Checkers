@@ -21,6 +21,8 @@ public class Player {
         this.type = type;
         this.grid = grid;
         this.board = board;
+        fillHome();
+        drawPieces(this.grid);
     }
 
     public void fillHome(){
@@ -28,8 +30,24 @@ public class Player {
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].getTypeOfTile().equals(type)) {
-                    GridPane.setConstraints(this.pieces[count] = new Piece(goalHouse, color,j,i), j, i);
-                    grid.getChildren().add(this.pieces[count]);
+                    this.pieces[count] = new Piece(goalHouse, color,j,i);
+                    count++;
+                }
+            }
+        }
+    }
+
+    public void drawPieces(GridPane grid){
+        int count=0;
+        for(int i=0; i<board.getHeight(); i++){
+            for(int j=0; j<board.getWidth(); j++){
+                if(board.getBoard()[j][i].hasPieceOfColor(color)) {
+                    GridPane.setConstraints(this.pieces[count] = board.getBoard()[j][i].getPiece(), j, i);
+                    System.out.println("to ile razy się wypierdolę tym razem? (" + color + " --- " + j + " : " + i + ")");
+                    try {
+                        grid.getChildren().add(this.pieces[count]);
+                    }catch(IllegalArgumentException iax){
+                    }
                     count++;
                 }
             }

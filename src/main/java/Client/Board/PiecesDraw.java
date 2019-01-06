@@ -11,7 +11,7 @@ import static javafx.scene.paint.Color.*;
 
 
 public class PiecesDraw {
-    private List<Player> players = new ArrayList<Player>();
+    private static ArrayList<Player> players = new ArrayList<Player>();
     private static final Color[] colors = new Color[] {BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     Color color;
     private StarBoard board;
@@ -34,7 +34,6 @@ public class PiecesDraw {
                 break;
         }
         addInfo(grid);
-
     }
 
     public void DrawForTwo(GridPane grid) {
@@ -42,8 +41,6 @@ public class PiecesDraw {
         Player op1 = new Player(colors[1],"HOME_MIDDLE_TOP",grid, "HOME_MIDDLE_DOWN", board);
         players.add(pl);
         players.add(op1);
-
-
     }
 
     public void DrawForThree (GridPane grid) {
@@ -53,8 +50,6 @@ public class PiecesDraw {
         players.add(pl);
         players.add(op1);
         players.add(op2);
-
-
     }
 
     public void DrawForFour (GridPane grid) {
@@ -66,7 +61,6 @@ public class PiecesDraw {
         players.add(op1);
         players.add(op2);
         players.add(op3);
-
     }
 
     public void DrawForSix (GridPane grid) {
@@ -82,7 +76,6 @@ public class PiecesDraw {
         players.add(op3);
         players.add(op4);
         players.add(op5);
-
     }
 
     public void addInfo(GridPane grid) {
@@ -90,20 +83,13 @@ public class PiecesDraw {
         label.setTextFill(color);
         grid.setConstraints(label,12,16, 50,32);
         grid.getChildren().add(label);
-
     }
 
-    public void drawPieces(){
-        for(int i=0 ; i<players.size(); i++){
-            players.get(i).fillHome();
-        }
-    }
-
-    public List<Player> getPlayers() {
+    public static ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public void setPlayers(List<Player> players) {
+    public void setPlayers(ArrayList<Player> players) {
         this.players = players;
     }
 }

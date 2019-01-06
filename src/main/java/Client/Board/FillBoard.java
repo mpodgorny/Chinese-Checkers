@@ -2,6 +2,7 @@ package Client.Board;
 
 import Server.ServerMain;
 import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -14,6 +15,5 @@ public class FillBoard {
         this.grid=bd.getGrid();
         this.color=color;
         PiecesDraw piecesDraw = new PiecesDraw(numberOfPlayers, bd.getGrid(), color, board);
-        piecesDraw.drawPieces();
     }
 }

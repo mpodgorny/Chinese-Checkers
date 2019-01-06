@@ -1,5 +1,8 @@
 package Server;
 
+import Client.Board.MoveControl;
+import Client.Board.StarBoard;
+
 import java.io.*;
 import java.net.Socket;
 import java.text.DateFormat;
@@ -40,7 +43,7 @@ public class ClientHandler extends Thread {
                 try {
                     out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
                     gotSignal = false;
-                    gameControl();
+                    //gameControl();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -172,7 +175,7 @@ public class ClientHandler extends Thread {
         Boolean isHost;
         try {
             for (int i = 0; i < numberOfPlayers; i++) {
-                System.out.println("i rowna sie: "+i);
+                System.out.println("\ni rowna sie: "+i);
                 for (ClientHandler ch : ServerMain.ar) {
                     System.out.println("Teraz rozdaje "+i+" graczowi "+ ch.nick);
                     ch.out.writeInt(i);
