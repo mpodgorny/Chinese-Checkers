@@ -1,5 +1,6 @@
 package Client.Board;
 
+import Client.ServerListener;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -15,6 +16,10 @@ public class Piece extends StackPane {
     public int column, row;
     private Color color;
     private String goalHouse;
+    private String move;
+    private boolean moveMade = false;
+    private int count = 0;
+
     public Piece(String goalHouse, Color color, int x, int y) {
         this.goalHouse=goalHouse;
         this.column=x;
@@ -32,14 +37,30 @@ public class Piece extends StackPane {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                System.out.println("clicked col: " + column + " row: " +row);
+                MoveControl.setMove(String.format("%s-%d:%d-", color.toString(), column, row));
+                MoveControl.setMoveDone(false);
             }
         });
         getChildren().add(piece);
+        ServerListener.getBoard().getBoard()[x][y].setPiece(this);
     }
     public int getColumn(){return column;}
     public int getRow(){return row;}
     public Color getColor(){return this.color;}
     public Piece chosenPiece(){return this;}
+    public void dropPiece(){
+        getChildren().remove(this);
+    }
 
+    public void setColumn(int column) {
+        this.column = column;
+    }
+
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public String getGoalHouse() {
+        return goalHouse;
+    }
 }

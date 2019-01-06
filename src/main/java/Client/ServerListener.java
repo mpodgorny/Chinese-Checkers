@@ -1,12 +1,12 @@
 package Client;
 
-import Client.Board.FillBoard;
-import Client.Board.StarBoard;
+import Client.Board.*;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.ArrayList;
 
 import static javafx.scene.paint.Color.*;
 import static javafx.scene.paint.Color.CHOCOLATE;
@@ -27,7 +27,7 @@ public class ServerListener extends Thread {
     private static volatile int sizeOfLobby;
     private String tempString;
     private static volatile int colorIndex;
-    private StarBoard board;
+    private static StarBoard board;
 
     public ServerListener(Menu menu) {
         this.menu = menu;
@@ -97,11 +97,12 @@ public class ServerListener extends Thread {
                 case "START_GAME":
                     tempString = String.format("%c", message.charAt(10));
                     sizeOfLobby = Integer.parseInt(tempString);
-                    board = new StarBoard(37);
+                    board = new StarBoard(121);
                     Platform.runLater(() -> {
                         FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
                     });
-                    gameControl();
+                    //gameControl();
+                    waitForMove();
                     break;
 
                 default:
@@ -139,5 +140,47 @@ public class ServerListener extends Thread {
             } catch (IOException ex) {}
 
         }
+    }
+
+    private void waitForMove(){
+        boolean runTUDUDUDU = true;
+        while(runTUDUDUDU){
+            if(MoveControl.isMoveDone())
+                runTUDUDUDU = false;
+            else {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("Może byś coś zrobił tępy chuju");
+        board = makeMove(MoveControl.getMove());
+        Platform.runLater(() -> {
+            JustDraw justDraw = new JustDraw(board, menu.primaryStage);
+        });
+        System.out.println("ty w ogóle masz jakąś pasję?");
+    }
+
+    private StarBoard makeMove(String move){
+        StarBoard starBoard = board;
+        String[] components = move.split("-");
+        String[] startCords = components[1].split(":");
+        String[] endCords = components[2].split(":");
+        int startColumn = Integer.parseInt(startCords[0]);
+        int startRow = Integer.parseInt(startCords[1]);
+        int endColumn = Integer.parseInt(endCords[0]);
+        int endRow = Integer.parseInt(endCords[1]);
+
+        Piece tempPiece = starBoard.getBoard()[startColumn][startRow].getPiece();
+        starBoard.getBoard()[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow));
+        starBoard.getBoard()[startColumn][startRow].dropPiece();
+
+        return starBoard;
+    }
+
+    public static StarBoard getBoard() {
+        return board;
     }
 }

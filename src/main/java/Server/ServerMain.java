@@ -27,7 +27,7 @@ public class ServerMain  {
     static List<Socket> sockets = new ArrayList<Socket>();
     static List<DataInputStream> in_list = new ArrayList<DataInputStream>();
     static List<DataOutputStream> out_list = new ArrayList<DataOutputStream>();
-    static List<Thread> thread_list = new ArrayList<Thread>();
+    static ArrayList<Thread> thread_list = new ArrayList<Thread>();
     public static StarBoard board = new StarBoard(121);
     //static volatile  Vector<ClientHandler> ar = new Vector<>();
     static volatile List<ClientHandler> ar=new ArrayList<ClientHandler>();
@@ -60,6 +60,7 @@ public class ServerMain  {
                 s = server.ss.accept();
 
                 Thread t = setupClientThread(s);
+                thread_list.add(t);
 
                 // Invoking the start() method
                 t.start();

@@ -13,6 +13,7 @@ public class Tile extends Circle {
     public int column;
     public int row;
     private String typeOfTile;
+    private Piece piece = null;
 
     public String getTypeOfTile() {
         return typeOfTile;
@@ -35,7 +36,9 @@ public class Tile extends Circle {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                System.out.println("clicked col: " + column + " row: " +row);
+                //System.out.println("clicked col: " + column + " row: " +row);
+                MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
+                System.out.println(MoveControl.getMove());
             }
         });
 
@@ -53,7 +56,9 @@ public class Tile extends Circle {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent t) {
-                System.out.println("clicked col: " + column + " row: " +row);
+                //System.out.println("clicked col: " + column + " row: " +row);
+                MoveControl.setMove(MoveControl.getMove() + String.format("%d:%d", column, row));
+                MoveControl.setMoveDone(true);
             }
         });
     }
@@ -62,5 +67,25 @@ public class Tile extends Circle {
     public int getColumn(){return column;}
     public Tile getTile() {return this;}
 
+    public Piece getPiece() {
+        return piece;
+    }
 
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public void dropPiece() {
+        piece.dropPiece();
+        piece = null;
+    }
+
+    public boolean hasPieceOfColor(Color color){
+        try{
+            if(piece.getColor() == color)
+                return true;
+        }catch(NullPointerException npex){
+        }
+        return false;
+    }
 }

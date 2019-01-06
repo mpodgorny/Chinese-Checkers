@@ -19,7 +19,6 @@ public class BoardDraw {
         Scene startup = new Scene(drawTiles(board));
         primaryStage.setScene(startup);
         primaryStage.show();
-
     }
 
     private Parent drawTiles(StarBoard board){
@@ -36,7 +35,6 @@ public class BoardDraw {
                 }
             }
         }
-
         return grid;
     }
 
