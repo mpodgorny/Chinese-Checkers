@@ -101,13 +101,6 @@ public class ServerListener extends Thread {
                     tempString = String.format("%c", message.charAt(10));
                     sizeOfLobby = Integer.parseInt(tempString);
                     boardSize = 121;
-                    board = new StarBoard(boardSize);
-                    Platform.runLater(() -> {
-                        //FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
-
-                        PiecesDraw piecesDraw = new PiecesDraw(sizeOfLobby, board);
-                        JustDraw justDraw = new JustDraw(board, menu.primaryStage);
-                    });
                     try {
                         startedGameService();
                     } catch (IOException e) {
@@ -150,19 +143,28 @@ public class ServerListener extends Thread {
     }
 
     public void startedGameService() throws IOException {
+        StarBoard board = new StarBoard(boardSize);
+        Platform.runLater(() -> {
+            PiecesDraw piecesDraw = new PiecesDraw(sizeOfLobby, board);
+            JustDraw justDraw = new JustDraw(board, menu.primaryStage);
+            BoardDraw.drawBoardAccessories(output, colors[colorIndex-1]);
+        });
         output.writeInt(boardSize);
         boolean gameWon = false;
-        while(true){
-            if(gameWon && wonByColor(board, colors[colorIndex-1])){
-                //System.out.println("you won!");
-                gameWon = true;
+        while(true) {
+            if(gameWon){
                 String message = input.readUTF();
-                if (message.equals("YOUR_TURN")) {
+                if(message.equals("YOUR_TURN")){
                     output.writeUTF("SKIP_TURN");
                 }
+                message = input.readUTF();
             }else {
                 String message = input.readUTF();
                 if (message.equals("YOUR_TURN")) {
+                    Platform.runLater(() -> {
+                        Double a = board.getWidth()*0.1;
+                        BoardDraw.drawInfoLabel("Your turn", a.intValue(), a.intValue(), BLACK);
+                    });
                     boolean moveCorrect = false;
                     while (!moveCorrect) {
                         MoveControl.setMoveDone(false);
@@ -177,6 +179,13 @@ public class ServerListener extends Thread {
                     ServerMain.makeMove(message, board);
                     Platform.runLater(() -> {
                         JustDraw justDraw = new JustDraw(board, menu.primaryStage);
+                        BoardDraw.drawBoardAccessories(output, colors[colorIndex-1]);
+                    });
+                }
+                if (wonByColor(board, colors[colorIndex - 1])) {
+                    gameWon = true;
+                    Platform.runLater(() -> {
+                        LobbyDraw lobbyDraw = new LobbyDraw(menu.primaryStage, "You won!");
                     });
                 }
             }
@@ -184,17 +193,16 @@ public class ServerListener extends Thread {
     }
 
     public boolean wonByColor(StarBoard board, Color color){
-        System.out.println("C'mon do sth");
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
                 if(board.getBoard()[j][i].hasPiece()
-                        /*&& board.getBoard()[j][i].getPiece().getColor()==color*/){
-                    System.out.println("dobry klocek mordo");
+                        && board.getBoard()[j][i].getPiece().getColor()==color){
                     if(board.getBoard()[j][i].getTypeOfTile()!=board.getBoard()[j][i].getPiece().getGoalHouse())
                         return false;
                 }
             }
         }
+        System.out.println("you won mordo");
         return true;
     }
 }
