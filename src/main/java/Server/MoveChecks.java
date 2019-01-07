@@ -6,7 +6,8 @@ import Client.Board.Tile;
 import java.util.ArrayList;
 
 public class MoveChecks {
-    public static boolean fullCheck(String formattedMove, StarBoard board){
+
+    public static int fullCheck(String formattedMove, StarBoard board){
         String[] components = formattedMove.split("-");
         int startColumn = Integer.parseInt(components[1].split(":")[0]);
         int startRow = Integer.parseInt(components[1].split(":")[1]);
@@ -15,92 +16,95 @@ public class MoveChecks {
 
         ArrayList<int[]> possibilities = fullPossibilities(startColumn, startRow, board);
         for(int i=0; i<possibilities.size(); i++){
-            if(possibilities.get(i)[0] == endColumn && possibilities.get(i)[1] == endRow)
-                return true;
+            if(possibilities.get(i)[0] == endColumn && possibilities.get(i)[1] == endRow) {
+                if (possibilities.get(i)[2] == 1)
+                    return 2;
+                return 1;
+            }
         }
-        return false;
+        return 0;
     }
 
     public static ArrayList<int[]> fullPossibilities(int column, int row, StarBoard board){
         ArrayList<int[]> possibilities = new ArrayList<>();
-        possibilities.add(leftPossibility(column, row, board));
-        possibilities.add(bottomLeftPossibility(column, row, board));
-        possibilities.add(upperLeftPossibility(column, row, board));
-        possibilities.add(rightPossibility(column, row, board));
-        possibilities.add(bottomRightPossibility(column, row, board));
-        possibilities.add(upperRightPossibility(column, row, board));
+        possibilities.add(leftPossibility(column, row, board, 0));
+        possibilities.add(bottomLeftPossibility(column, row, board, 0));
+        possibilities.add(upperLeftPossibility(column, row, board, 0));
+        possibilities.add(rightPossibility(column, row, board, 0));
+        possibilities.add(bottomRightPossibility(column, row, board, 0));
+        possibilities.add(upperRightPossibility(column, row, board, 0));
 
         return possibilities;
     }
 
-    public static int[] leftPossibility(int column, int row, StarBoard board){
+    public static int[] leftPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column-2 < 0 || board.getBoard()[column-2][row].getTypeOfTile() == "GHOST") {
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column-2][row].hasPiece()){
-            return leftPossibility(column-2, row, board);
+            return leftPossibility(column-2, row, board, 1);
         }else{
-            int[] cords = {column-2, row};
+            int[] cords = {column-2, row, jumpOver};
             return cords;
         }
     }
 
-    public static int[] rightPossibility(int column, int row, StarBoard board){
+    public static int[] rightPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column+2 > board.getWidth()-1 || board.getBoard()[column+2][row].getTypeOfTile() == "GHOST") {
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column+2][row].hasPiece()){
-            return rightPossibility(column+2, row, board);
+            return rightPossibility(column+2, row, board, 1);
         }else{
-            int[] cords = {column+2, row};
+            int[] cords = {column+2, row, jumpOver};
             return cords;
         }
     }
 
-    public static int[] upperLeftPossibility(int column, int row, StarBoard board){
+    public static int[] upperLeftPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column-1 < 0 || row-1 < 0 || board.getBoard()[column-1][row-1].getTypeOfTile() == "GHOST"){
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column-1][row-1].hasPiece()) {
-            return upperLeftPossibility(column - 1, row - 1, board);
+            return upperLeftPossibility(column - 1, row - 1, board, 1);
         }else{
-            int[] cords = {column-1, row-1};
+            int[] cords = {column-1, row-1, jumpOver};
             return cords;
         }
     }
 
-    public static int[] bottomLeftPossibility(int column, int row, StarBoard board){
+    public static int[] bottomLeftPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column-1 < 0 || row+1 > board.getHeight()-1 || board.getBoard()[column-1][row+1].getTypeOfTile() == "GHOST") {
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column-1][row+1].hasPiece()){
-            return bottomLeftPossibility(column-1, row+1, board);
+            return bottomLeftPossibility(column-1, row+1, board, 1);
         }else{
-            int[] cords = {column-1, row+1};
+            int[] cords = {column-1, row+1, jumpOver};
             return cords;
         }
     }
 
-    public static int[] upperRightPossibility(int column, int row, StarBoard board){
+    public static int[] upperRightPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column+1 > board.getWidth()-1 || row-1 < 0 || board.getBoard()[column+1][row-1].getTypeOfTile() == "GHOST"){
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column+1][row-1].hasPiece()) {
-            return upperRightPossibility(column + 1, row - 1, board);
+            return upperRightPossibility(column + 1, row - 1, board, 1);
         }else{
-            int[] cords = {column+1, row-1};
+            int[] cords = {column+1, row-1, jumpOver};
             return cords;
         }
     }
 
-    public static int[] bottomRightPossibility(int column, int row, StarBoard board){
+    public static int[] bottomRightPossibility(int column, int row, StarBoard board, int jumpOver){
         if(column+1 > board.getWidth()-1 || row+1 > board.getHeight()-1 || board.getBoard()[column+1][row+1].getTypeOfTile() == "GHOST"){
             int[] nuller = {-1, -1};
             return nuller;
         }else if(board.getBoard()[column+1][row+1].hasPiece()){
-            return bottomRightPossibility(column+1, row+1, board);
+            return bottomRightPossibility(column+1, row+1, board, 1);
         }else{
-            int[] cords = {column+1, row+1};
+            int[] cords = {column+1, row+1, jumpOver};
             return cords;
         }
     }
