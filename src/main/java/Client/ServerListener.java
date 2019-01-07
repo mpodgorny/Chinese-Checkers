@@ -155,7 +155,8 @@ public class ServerListener extends Thread {
                     String move = MoveControl.getMove();
                     System.out.println(move);
                     output.writeUTF(move);
-                    moveCorrect = input.readBoolean();
+                    if(input.readInt() > 0)
+                        moveCorrect = true;
                 }
             }else{
                 board.makeMove(message);

@@ -145,6 +145,7 @@ public class ServerMain  {
     public static void startGame() throws IOException {
         StarBoard board = new StarBoard(121);
         PiecesDraw piecesDraw = new PiecesDraw(2, board);
+        String jumpedOver = "FALSE";
         int i=0;
         while(true){
             String move="";
@@ -153,12 +154,21 @@ public class ServerMain  {
             boolean moveDone = false;
             while(!moveDone){
                 move = ch.in.readUTF();
-                System.out.println(move);
-                boolean moveCorrect = MoveChecks.fullCheck(move, board);
-                ch.out.writeBoolean(moveCorrect);
-                if(moveCorrect){
+                int moveCorrect;
+                if(!jumpedOver.equals("FALSE"))
+                    move = jumpedOver + move.split("-")[2];
+                moveCorrect = MoveChecks.fullCheck(move, board);
+                ch.out.writeInt(moveCorrect);
+                if(moveCorrect>0){
                     moveDone = true;
-                    board = makeMove(move, board);
+                    makeMove(move, board);
+                    if(moveCorrect==2) {
+                        System.out.println("przeskoczyło");
+                        i--;
+                        jumpedOver = move.split("-")[0] + "-" + move.split("-")[2] + "-";
+                    }else{
+                        jumpedOver = "FALSE";
+                    }
                 }
             }
             for(int j=0; j<ar.size(); j++){
@@ -171,8 +181,7 @@ public class ServerMain  {
         }
     }
 
-    private static StarBoard makeMove(String move, StarBoard board){
-        StarBoard starBoard = board;
+    private static void makeMove(String move, StarBoard board){
         String[] components = move.split("-");
         String[] startCords = components[1].split(":");
         String[] endCords = components[2].split(":");
@@ -181,11 +190,21 @@ public class ServerMain  {
         int endColumn = Integer.parseInt(endCords[0]);
         int endRow = Integer.parseInt(endCords[1]);
 
-        Piece tempPiece = starBoard.getBoard()[startColumn][startRow].getPiece();
-        starBoard.getBoard()[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow, board));
-        starBoard.getBoard()[startColumn][startRow].dropPiece();
-
-        return starBoard;
+        Piece tempPiece = board.getBoard()[startColumn][startRow].getPiece();
+        board
+                .getBoard()
+                [endColumn]
+                [endRow]
+                .setPiece(
+                        new Piece(
+                                tempPiece
+                                        .getGoalHouse(),
+                                tempPiece
+                                        .getColor(),
+                                endColumn,
+                                endRow,
+                                board));
+        board.getBoard()[startColumn][startRow].dropPiece();
     }
 
     private static void upośledzonaMetodaBoNieMamCzasuRozdzielaćKlas(StarBoard board){

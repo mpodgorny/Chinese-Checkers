@@ -47,12 +47,6 @@ public class ClientHandler extends Thread {
                     while(true) {
                         int i=0;
                     }
-                    /*if (iAmHosting) {
-                        System.out.println(nick + " is hosting the game.\nStarting!\n");
-                        //Thread t = new GameControl(serverMain, numberOfPlayers);
-                        //t.start();
-                        //gamePlaying();
-                    } else System.out.println("cos");//gamePlaying();*/
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
