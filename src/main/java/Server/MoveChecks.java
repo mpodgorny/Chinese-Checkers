@@ -17,9 +17,21 @@ public class MoveChecks {
         ArrayList<int[]> possibilities = fullPossibilities(startColumn, startRow, board);
         for(int i=0; i<possibilities.size(); i++){
             if(possibilities.get(i)[0] == endColumn && possibilities.get(i)[1] == endRow) {
-                if (possibilities.get(i)[2] == 1)
-                    return 2;
-                return 1;
+                if(board.getBoard()[startColumn][startRow].getPiece().getGoalHouse()
+                        == board.getBoard()[startColumn][startRow].getTypeOfTile()) {
+                    if(board.getBoard()[endColumn][endRow].getTypeOfTile()
+                            == board.getBoard()[startColumn][startRow].getTypeOfTile()) {
+                        if (possibilities.get(i)[2] == 1)
+                            return 2;
+                        return 1;
+                    }else{
+                        return 0;
+                    }
+                }else{
+                    if (possibilities.get(i)[2] == 1)
+                        return 2;
+                    return 1;
+                }
             }
         }
         return 0;

@@ -1,6 +1,7 @@
 package Server;
 
 import java.io.*;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -44,9 +45,8 @@ public class ClientHandler extends Thread {
                     out.writeUTF("START_GAME" + sizeOfLobby + numberOfPlayers);
                     gotSignal = false;
                     gameStarted = true;
-                    while(true) {
-                        int i=0;
-                    }
+                    socketServerPing();
+                    while(true){}
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -203,5 +203,9 @@ public class ClientHandler extends Thread {
         }
     }
 
+    private void socketServerPing() throws IOException {
+        InetAddress ip = InetAddress.getByName("localhost"); //pobranie ip hosta
+        Socket s = new Socket(ip, 2308);
+    }
 
 }
