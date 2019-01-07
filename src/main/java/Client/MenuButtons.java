@@ -1,14 +1,10 @@
 package Client;
 
-import Client.Board.BoardDraw;
-import Client.Board.FillBoard;
-import Server.ServerMain;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.*;
