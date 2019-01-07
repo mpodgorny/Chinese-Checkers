@@ -20,7 +20,7 @@ import static java.lang.Boolean.TRUE;
 public class ServerMain  {
     static ServerMain server;
     /**
-     * @param nicknames holds all names of players.
+     * lists of data asociated with server
      */
     static ArrayList<String> nicknames = new ArrayList<String>();
     static List<Socket> sockets = new ArrayList<Socket>();
@@ -77,16 +77,6 @@ public class ServerMain  {
             if(ClientHandler.gameStarted == true){
                 startGame();
             }
-            /*if(thread_list.size()>5){
-                while (!ClientHandler.gameStarted){
-                    try {
-                        Thread.sleep(250);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-                startGame();
-            }*/
         }
     }
 
@@ -110,6 +100,12 @@ public class ServerMain  {
         }
     }
 
+    /**
+     * Setting up a thread to maintain communication with client
+     * @param socket client's socket
+     * @return connected thread
+     * @throws IOException
+     */
     private static ClientHandler setupClientThread(Socket socket) throws IOException{
         System.out.println("A new player connected on adress : " + socket);
         // obtaining input and out streams
@@ -143,6 +139,10 @@ public class ServerMain  {
         return clientHandler;
     }
 
+    /**
+     * Method that performs all the action and interaction with clients once the game started
+     * @throws IOException
+     */
     public static void startGame() throws IOException {
         boolean ifJumped = false;
         int boardSize=1;
@@ -196,6 +196,11 @@ public class ServerMain  {
         }
     }
 
+    /**
+     * method that executes the command send by a formatted string on a given board
+     * @param move
+     * @param board
+     */
     public static void makeMove(String move, StarBoard board){
         String[] components = move.split("-");
         String[] startCords = components[1].split(":");

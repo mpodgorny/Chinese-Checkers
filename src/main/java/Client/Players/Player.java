@@ -7,6 +7,9 @@ import javafx.scene.paint.Color;
 
 public class Player {
 
+    /**
+     * fields of the class
+     */
     private Piece[] pieces = new Piece[10];
     public String goalHouse;
     Color color;
@@ -15,16 +18,13 @@ public class Player {
     String type;
     GridPane grid;
 
-    public Player(Color color, String type, GridPane grid, String goalHouse, StarBoard board){
-        this.goalHouse = goalHouse;
-        this.color = color;
-        this.type = type;
-        this.grid = grid;
-        this.board = board;
-        fillHome();
-        drawPieces(this.grid);
-    }
-
+    /**
+     * constructor
+     * @param color
+     * @param type
+     * @param goalHouse
+     * @param board
+     */
     public Player(Color color, String type, String goalHouse, StarBoard board){
         this.color = color;
         this.type = type;
@@ -33,6 +33,9 @@ public class Player {
         fillHome();
     }
 
+    /**
+     * a method that fills players' home with pieces
+     */
     public void fillHome(){
         int count=0;
         for(int i=0; i<board.getHeight(); i++){
@@ -45,6 +48,10 @@ public class Player {
         }
     }
 
+    /**
+     * a method that adds players' pieces to a grid
+     * @param grid
+     */
     public void drawPieces(GridPane grid){
         int count=0;
         for(int i=0; i<board.getHeight(); i++){

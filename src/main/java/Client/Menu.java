@@ -22,6 +22,15 @@ import java.net.Socket;
 public class Menu extends AbstractStage {
 
     Stage primaryStage;
+
+    /**
+     * constructor
+     * @param primaryStage
+     * @param nickname
+     * @param in
+     * @param out
+     * @param socket
+     */
     public Menu(Stage primaryStage, String nickname, DataInputStream in, DataOutputStream out, Socket socket) {
 
         this.in = in;
