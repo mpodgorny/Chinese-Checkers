@@ -59,6 +59,10 @@ public class ServerMain  {
             {
                 // socket object to receive incoming client requests
                 s = server.ss.accept();
+                if(ClientHandler.gameStarted) {
+                    startGame();
+                    System.out.println("gra wystartowała");
+                }
 
                 Thread t = setupClientThread(s);
                 thread_list.add(t);
@@ -76,7 +80,7 @@ public class ServerMain  {
             if(ClientHandler.gameStarted == true){
                 startGame();
             }
-            if(thread_list.size()>1){
+            /*if(thread_list.size()>5){
                 while (!ClientHandler.gameStarted){
                     try {
                         Thread.sleep(250);
@@ -85,7 +89,7 @@ public class ServerMain  {
                     }
                 }
                 startGame();
-            }
+            }*/
         }
     }
 
@@ -143,8 +147,12 @@ public class ServerMain  {
     }
 
     public static void startGame() throws IOException {
-        StarBoard board = new StarBoard(121);
-        PiecesDraw piecesDraw = new PiecesDraw(2, board);
+        int boardSize=1;
+        for(int i=0; i<ar.size(); i++){
+            boardSize = ar.get(i).in.readInt();
+        }
+        StarBoard board = new StarBoard(boardSize);
+        PiecesDraw piecesDraw = new PiecesDraw(ar.size(), board);
         String jumpedOver = "FALSE";
         int i=0;
         while(true){
@@ -154,21 +162,24 @@ public class ServerMain  {
             boolean moveDone = false;
             while(!moveDone){
                 move = ch.in.readUTF();
-                int moveCorrect;
-                if(!jumpedOver.equals("FALSE"))
-                    move = jumpedOver + move.split("-")[2];
-                moveCorrect = MoveChecks.fullCheck(move, board);
-                ch.out.writeInt(moveCorrect);
-                if(moveCorrect>0){
-                    moveDone = true;
-                    makeMove(move, board);
-                    if(moveCorrect==2) {
-                        System.out.println("przeskoczyło");
-                        i--;
-                        jumpedOver = move.split("-")[0] + "-" + move.split("-")[2] + "-";
-                    }else{
-                        jumpedOver = "FALSE";
+                if(!move.equals("SKIP_TURN")) {
+                    int moveCorrect;
+                    if (!jumpedOver.equals("FALSE"))
+                        move = jumpedOver + move.split("-")[2];
+                    moveCorrect = MoveChecks.fullCheck(move, board);
+                    ch.out.writeInt(moveCorrect);
+                    if (moveCorrect > 0) {
+                        moveDone = true;
+                        makeMove(move, board);
+                        if (moveCorrect == 2) {
+                            i--;
+                            jumpedOver = move.split("-")[0] + "-" + move.split("-")[2] + "-";
+                        } else {
+                            jumpedOver = "FALSE";
+                        }
                     }
+                }else{
+                    moveDone = true;
                 }
             }
             for(int j=0; j<ar.size(); j++){
@@ -181,7 +192,7 @@ public class ServerMain  {
         }
     }
 
-    private static void makeMove(String move, StarBoard board){
+    public static void makeMove(String move, StarBoard board){
         String[] components = move.split("-");
         String[] startCords = components[1].split(":");
         String[] endCords = components[2].split(":");
@@ -191,19 +202,7 @@ public class ServerMain  {
         int endRow = Integer.parseInt(endCords[1]);
 
         Piece tempPiece = board.getBoard()[startColumn][startRow].getPiece();
-        board
-                .getBoard()
-                [endColumn]
-                [endRow]
-                .setPiece(
-                        new Piece(
-                                tempPiece
-                                        .getGoalHouse(),
-                                tempPiece
-                                        .getColor(),
-                                endColumn,
-                                endRow,
-                                board));
+        board.getBoard()[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(), tempPiece.getColor(), endColumn, endRow, board));
         board.getBoard()[startColumn][startRow].dropPiece();
     }
 

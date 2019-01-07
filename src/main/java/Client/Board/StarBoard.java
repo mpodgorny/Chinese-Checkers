@@ -110,20 +110,6 @@ public class StarBoard {
         }
     }
 
-    public void makeMove(String move){
-        String[] components = move.split("-");
-        String[] startCords = components[1].split(":");
-        String[] endCords = components[2].split(":");
-        int startColumn = Integer.parseInt(startCords[0]);
-        int startRow = Integer.parseInt(startCords[1]);
-        int endColumn = Integer.parseInt(endCords[0]);
-        int endRow = Integer.parseInt(endCords[1]);
-
-        Piece tempPiece = board[startColumn][startRow].getPiece();
-        board[endColumn][endRow].setPiece(new Piece(tempPiece.getGoalHouse(),tempPiece.getColor(), endColumn, endRow));
-        board[startColumn][startRow].dropPiece();
-    }
-
     public int getHeight() {
         return height;
     }

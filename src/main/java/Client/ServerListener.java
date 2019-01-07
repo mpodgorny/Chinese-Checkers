@@ -1,6 +1,7 @@
 package Client;
 
 import Client.Board.*;
+import Server.ServerMain;
 import javafx.application.Platform;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -28,6 +29,7 @@ public class ServerListener extends Thread {
     private String tempString;
     private static volatile int colorIndex;
     private static StarBoard board;
+    private static int boardSize;
 
     public ServerListener(Menu menu) {
         this.menu = menu;
@@ -98,9 +100,13 @@ public class ServerListener extends Thread {
                 case "START_GAME":
                     tempString = String.format("%c", message.charAt(10));
                     sizeOfLobby = Integer.parseInt(tempString);
-                    board = new StarBoard(121);
+                    boardSize = 121;
+                    board = new StarBoard(boardSize);
                     Platform.runLater(() -> {
-                        FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
+                        //FillBoard fillBoard = new FillBoard(sizeOfLobby, menu.primaryStage, colors[colorIndex - 1], board);
+
+                        PiecesDraw piecesDraw = new PiecesDraw(sizeOfLobby, board);
+                        JustDraw justDraw = new JustDraw(board, menu.primaryStage);
                     });
                     try {
                         startedGameService();
@@ -144,26 +150,51 @@ public class ServerListener extends Thread {
     }
 
     public void startedGameService() throws IOException {
+        output.writeInt(boardSize);
+        boolean gameWon = false;
         while(true){
-            String message = input.readUTF();
-            if(message.equals("YOUR_TURN")){
-                boolean moveCorrect = false;
-                while(!moveCorrect){
-                    MoveControl.setMoveDone(false);
-                    MoveControl.setMove(null);
-                    waitForMove();
-                    String move = MoveControl.getMove();
-                    System.out.println(move);
-                    output.writeUTF(move);
-                    if(input.readInt() > 0)
-                        moveCorrect = true;
+            if(gameWon && wonByColor(board, colors[colorIndex-1])){
+                //System.out.println("you won!");
+                gameWon = true;
+                String message = input.readUTF();
+                if (message.equals("YOUR_TURN")) {
+                    output.writeUTF("SKIP_TURN");
                 }
-            }else{
-                board.makeMove(message);
-                Platform.runLater(() -> {
-                    JustDraw justDraw = new JustDraw(board, menu.primaryStage);
-                });
+            }else {
+                String message = input.readUTF();
+                if (message.equals("YOUR_TURN")) {
+                    boolean moveCorrect = false;
+                    while (!moveCorrect) {
+                        MoveControl.setMoveDone(false);
+                        MoveControl.setMove(null);
+                        waitForMove();
+                        String move = MoveControl.getMove();
+                        output.writeUTF(move);
+                        if (input.readInt() > 0)
+                            moveCorrect = true;
+                    }
+                } else if (!message.equals("SKIP_TURN")) {
+                    ServerMain.makeMove(message, board);
+                    Platform.runLater(() -> {
+                        JustDraw justDraw = new JustDraw(board, menu.primaryStage);
+                    });
+                }
             }
         }
+    }
+
+    public boolean wonByColor(StarBoard board, Color color){
+        System.out.println("C'mon do sth");
+        for(int i=0; i<board.getHeight(); i++){
+            for(int j=0; j<board.getWidth(); j++){
+                if(board.getBoard()[j][i].hasPiece()
+                        /*&& board.getBoard()[j][i].getPiece().getColor()==color*/){
+                    System.out.println("dobry klocek mordo");
+                    if(board.getBoard()[j][i].getTypeOfTile()!=board.getBoard()[j][i].getPiece().getGoalHouse())
+                        return false;
+                }
+            }
+        }
+        return true;
     }
 }

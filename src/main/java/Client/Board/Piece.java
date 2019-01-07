@@ -20,31 +20,6 @@ public class Piece extends StackPane {
     private boolean moveMade = false;
     private int count = 0;
 
-    public Piece(String goalHouse, Color color, int x, int y) {
-        this.goalHouse=goalHouse;
-        this.column=x;
-        this.row=y;
-        this.color=color;
-        Circle piece = new Circle();
-        piece.setStroke(Color.RED);
-        piece.setStrokeWidth(PIECE_SIZE * 0.03);
-        piece.setRadius(PIECE_SIZE);
-        piece.setFill(color);
-        piece.setStroke(Color.DARKGRAY);
-        piece.setStrokeWidth(TILE_RADIUS * 0.06);
-        piece.isSmooth();
-
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent t) {
-                MoveControl.setMove(String.format("%s-%d:%d-", color.toString(), column, row));
-                MoveControl.setMoveDone(false);
-            }
-        });
-        getChildren().add(piece);
-        ServerListener.getBoard().getBoard()[x][y].setPiece(this);
-    }
-
     public Piece(String goalHouse, Color color, int x, int y, StarBoard board) {
         this.goalHouse=goalHouse;
         this.column=x;
