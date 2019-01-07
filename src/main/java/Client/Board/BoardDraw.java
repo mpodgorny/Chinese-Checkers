@@ -48,16 +48,13 @@ public class BoardDraw {
 
     public GridPane getGrid() {return this.grid;}
 
-    public static void drawSkipButton(DataOutputStream out){
+    public static void drawSkipButton(){
         Button button = new Button("Skip Turn");
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                try {
-                    out.writeUTF("SKIP_TURN");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                MoveControl.setMove("SKIP_TURN");
+                MoveControl.setMoveDone(true);
             }
         });
         Double width = board.getWidth()*0.90;
@@ -74,7 +71,7 @@ public class BoardDraw {
     }
 
     public static void drawBoardAccessories(DataOutputStream out, Color color){
-        BoardDraw.drawSkipButton(out);
+        BoardDraw.drawSkipButton();
         Double a = board.getWidth()*0.10;
         Double b = board.getHeight()*0.90;
         BoardDraw.drawInfoLabel("Your color", a.intValue(), b.intValue(), color);
