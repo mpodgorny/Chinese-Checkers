@@ -179,7 +179,9 @@ public class ServerMain  {
                         }
                     }
                 }else{
+                    ch.out.writeInt(1);
                     moveDone = true;
+                    jumpedOver = "FALSE";
                 }
             }
             for(int j=0; j<ar.size(); j++){

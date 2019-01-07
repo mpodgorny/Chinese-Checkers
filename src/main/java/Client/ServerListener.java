@@ -122,7 +122,7 @@ public class ServerListener extends Thread {
         boolean runTUDUDUDU = true;
         while(runTUDUDUDU){
             if(MoveControl.isMoveDone())
-                if(MoveControl.getMove().split("-")[0].equals(colors[colorIndex-1].toString())) {
+                if(MoveControl.getMove().equals("SKIP_TURN") || MoveControl.getMove().split("-")[0].equals(colors[colorIndex-1].toString())) {
                     runTUDUDUDU = false;
                 } else {
                     System.out.println("Wrong color");
@@ -149,15 +149,18 @@ public class ServerListener extends Thread {
             JustDraw justDraw = new JustDraw(board, menu.primaryStage);
             BoardDraw.drawBoardAccessories(output, colors[colorIndex-1]);
         });
+        System.out.println("kolor: " + colorIndex);
         output.writeInt(boardSize);
         boolean gameWon = false;
         while(true) {
             if(gameWon){
                 String message = input.readUTF();
                 if(message.equals("YOUR_TURN")){
-                    output.writeUTF("SKIP_TURN");
+                    MoveControl.setMove("SKIP_TURN");
+                    String move = MoveControl.getMove();
+                    output.writeUTF(move);
+                    int holder = input.readInt();
                 }
-                message = input.readUTF();
             }else {
                 String message = input.readUTF();
                 if (message.equals("YOUR_TURN")) {
@@ -175,8 +178,9 @@ public class ServerListener extends Thread {
                         if (input.readInt() > 0)
                             moveCorrect = true;
                     }
-                } else if (!message.equals("SKIP_TURN")) {
-                    ServerMain.makeMove(message, board);
+                } else {
+                    if(!message.equals("SKIP_TURN"))
+                        ServerMain.makeMove(message, board);
                     Platform.runLater(() -> {
                         JustDraw justDraw = new JustDraw(board, menu.primaryStage);
                         BoardDraw.drawBoardAccessories(output, colors[colorIndex-1]);
