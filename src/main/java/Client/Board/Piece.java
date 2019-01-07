@@ -20,6 +20,14 @@ public class Piece extends StackPane {
     private boolean moveMade = false;
     private int count = 0;
 
+    /**
+     * constructor
+     * @param goalHouse
+     * @param color
+     * @param x
+     * @param y
+     * @param board
+     */
     public Piece(String goalHouse, Color color, int x, int y, StarBoard board) {
         this.goalHouse=goalHouse;
         this.column=x;

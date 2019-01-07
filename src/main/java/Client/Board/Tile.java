@@ -23,6 +23,11 @@ public class Tile extends Circle {
         this.typeOfTile = typeOfTile;
     }
 
+    /**
+     * constructor
+     * @param column
+     * @param row
+     */
     public Tile(int column, int row) {
         this.column=column;
         this.row=row;
@@ -42,6 +47,13 @@ public class Tile extends Circle {
         });
 
     }
+
+    /**
+     * another constructor, but with chosable color
+     * @param column
+     * @param row
+     * @param color
+     */
     public Tile(int column, int row, Color color) {
         this.column=column;
         this.row=row;

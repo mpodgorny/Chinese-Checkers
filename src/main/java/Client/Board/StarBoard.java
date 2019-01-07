@@ -11,6 +11,10 @@ public class StarBoard {
     public static int TILE_RADIUS;
     private Tile[][] board;
 
+    /**
+     * constructor
+     * @param tilesCount
+     */
     public StarBoard(int tilesCount){
         this.tilesCount = tilesCount;
         piecesCount = ((tilesCount - 1) / 12);
@@ -23,6 +27,10 @@ public class StarBoard {
         //simpleCheck();
     }
 
+    /**
+     * uses methods for drawing the full board
+     * @param size
+     */
     private void makeBoard(int size){
         fillInverseTriangle(size, 0, size,"HOME_LEFT_TOP");
         fillInverseTriangle(size, 4*size+2, size, "HOME_RIGHT_TOP");
@@ -34,6 +42,9 @@ public class StarBoard {
         fillGhosts();
     }
 
+    /**
+     * fills the array for empty spaces(without tile)
+     */
     private void fillGhosts(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
@@ -46,6 +57,13 @@ public class StarBoard {
         }
     }
 
+    /**
+     * creates triangle "house" for pieces
+     * @param size
+     * @param x
+     * @param y
+     * @param Type
+     */
     private void fillInverseTriangle(int size, int x, int y, String Type ){
         int count = size;
         for(int i=y; i<size+y; i++){
@@ -60,6 +78,13 @@ public class StarBoard {
         }
     }
 
+    /**
+     * creates triangle house for pieces
+     * @param size
+     * @param x
+     * @param y
+     * @param Type
+     */
     private void fillTriangle(int size, int x, int y, String Type){
         int count = size;
         for(int i=y; i>y-size; i--){
@@ -74,6 +99,12 @@ public class StarBoard {
         }
     }
 
+    /**
+     * creates hexagon middle of the board
+     * @param side
+     * @param x
+     * @param y
+     */
     private void fillHexagon(int side, int x, int y){
         int count = side;
         boolean theSwitch = false;
@@ -94,8 +125,9 @@ public class StarBoard {
         }
     }
 
-    //Prosta metoda drukująca gwiazdki w konsoli - potrzebowałem jej do sprawdzania algorytmów rysowania
-    //Może się jeszcze przydać, więc zostawiam
+    /**
+     * method (currently not used) for checking the drawing methods
+     */
     public void simpleCheck(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
