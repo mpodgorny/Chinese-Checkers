@@ -22,6 +22,11 @@ public class BoardDraw {
     private static GridPane grid;
     private static StarBoard board;
 
+    /**
+     * constructor
+     * @param primaryStage
+     * @param board
+     */
     public BoardDraw(Stage primaryStage, StarBoard board) {
         this.board = board;
         Scene startup = new Scene(drawTiles(board));
@@ -29,6 +34,11 @@ public class BoardDraw {
         primaryStage.show();
     }
 
+    /**
+     * Method drawing tiles
+     * @param board
+     * @return
+     */
     private Parent drawTiles(StarBoard board){
         GridPane grid = new GridPane();
         this.grid = grid;
@@ -48,6 +58,9 @@ public class BoardDraw {
 
     public GridPane getGrid() {return this.grid;}
 
+    /**
+     * draws skip button
+     */
     public static void drawSkipButton(){
         Button button = new Button("Skip Turn");
         button.setOnAction(new EventHandler<ActionEvent>() {
@@ -63,6 +76,13 @@ public class BoardDraw {
         grid.getChildren().add(button);
     }
 
+    /**
+     * draws label about current game
+     * @param info
+     * @param column
+     * @param row
+     * @param color
+     */
     public static void drawInfoLabel(String info, int column, int row, Color color){
         Label label = new Label(info);
         label.setTextFill(color);
@@ -70,6 +90,11 @@ public class BoardDraw {
         grid.getChildren().add(label);
     }
 
+    /**
+     * adds skip button, and players pieces color
+     * @param out
+     * @param color
+     */
     public static void drawBoardAccessories(DataOutputStream out, Color color){
         BoardDraw.drawSkipButton();
         Double a = board.getWidth()*0.10;
