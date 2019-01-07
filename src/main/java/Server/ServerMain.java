@@ -11,10 +11,7 @@ import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -147,6 +144,7 @@ public class ServerMain  {
     }
 
     public static void startGame() throws IOException {
+        boolean ifJumped = false;
         int boardSize=1;
         for(int i=0; i<ar.size(); i++){
             boardSize = ar.get(i).in.readInt();
@@ -154,7 +152,8 @@ public class ServerMain  {
         StarBoard board = new StarBoard(boardSize);
         PiecesDraw piecesDraw = new PiecesDraw(ar.size(), board);
         String jumpedOver = "FALSE";
-        int i=0;
+        Random random = new Random();
+        int i=random.nextInt(ar.size()-1);
         while(true){
             String move="";
             ClientHandler ch = ar.get(i);
@@ -166,7 +165,7 @@ public class ServerMain  {
                     int moveCorrect;
                     if (!jumpedOver.equals("FALSE"))
                         move = jumpedOver + move.split("-")[2];
-                    moveCorrect = MoveChecks.fullCheck(move, board);
+                    moveCorrect = MoveChecks.fullCheck(move, board, ifJumped);
                     ch.out.writeInt(moveCorrect);
                     if (moveCorrect > 0) {
                         moveDone = true;
@@ -174,14 +173,17 @@ public class ServerMain  {
                         if (moveCorrect == 2) {
                             i--;
                             jumpedOver = move.split("-")[0] + "-" + move.split("-")[2] + "-";
+                            ifJumped=true;
                         } else {
                             jumpedOver = "FALSE";
+                            ifJumped=false;
                         }
                     }
                 }else{
                     ch.out.writeInt(1);
                     moveDone = true;
                     jumpedOver = "FALSE";
+                    ifJumped = false;
                 }
             }
             for(int j=0; j<ar.size(); j++){
