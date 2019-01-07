@@ -11,14 +11,14 @@ import static Server.ServerMain.gameStarted;
 
 public class ClientHandler extends Thread {
 
-    DateFormat fordate = new SimpleDateFormat("yyyy/MM/dd");
-    DateFormat fortime = new SimpleDateFormat("hh:mm:ss");
+    /**
+     * all the data necessary to run an interaction with client threads
+     */
     final DataInputStream in;
     final DataOutputStream out;
     final Socket s;
     String nick;
     static Boolean isHost = false;
-    int typeOfGame;
     private Boolean iAmHosting = false;
     ServerMain serverMain;
     private static volatile int sizeOfLobby;
@@ -36,6 +36,9 @@ public class ClientHandler extends Thread {
         this.serverMain = serverMain;
     }
 
+    /**
+     * Interaction with client before the game starts (chosing number of players etc.)
+     */
     @Override
     public void run() {
         while (true) {
@@ -181,28 +184,10 @@ public class ClientHandler extends Thread {
         return isHosting;
     }
 
-    private void gamePlaying() {
-        while (true) {
-            for (int i = 0; i < numberOfPlayers; i++) {
-                try{
-                    System.out.println(i+" to aktualne i.Moj kolor i nick to: " +colorNumber +" "+ nick);
-                    if(i==colorNumber) {
-                        System.out.println("Gracz " + nick +" wykonuje ruch");
-                        String msg = ar.get(i).in.readUTF();
-                        System.out.println("Dostalem " + msg);
-                        for (int j = 0; j < numberOfPlayers; j++) {
-                            if (j != i) ar.get(j).out.writeUTF(msg);
-                        }
-                    }else {
-                        in.readBoolean();
-                    }
-                } catch (IOException e){}
-                if(i==numberOfPlayers-1){i=-1;}
-            }
-
-        }
-    }
-
+    /**
+     * method used to ping the server so it starts the game
+     * @throws IOException
+     */
     private void socketServerPing() throws IOException {
         InetAddress ip = InetAddress.getByName("localhost"); //pobranie ip hosta
         Socket s = new Socket(ip, 2308);

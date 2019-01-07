@@ -1,9 +1,5 @@
 package Client;
 
-import Client.Board.BoardDraw;
-import Client.Board.FillBoard;
-import Client.Board.StarBoard;
-import Server.ServerMain;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -19,11 +19,12 @@ import static javafx.scene.paint.Color.CHOCOLATE;
  */
 public class ServerListener extends Thread {
 
+    /**
+     * All the data necessary to communicate with server's threads
+     */
     private Menu menu;
     private static DataOutputStream output;
     private static DataInputStream input;
-    private boolean Disconnected;
-    private boolean isHosting = false;
     private static final Color[] colors = new Color[]{BLUE, RED, GREEN, YELLOW, AZURE, CHOCOLATE};
     private static volatile int sizeOfLobby;
     private String tempString;
@@ -31,6 +32,10 @@ public class ServerListener extends Thread {
     private static StarBoard board;
     private static int boardSize;
 
+    /**
+     * constructor
+     * @param menu
+     */
     public ServerListener(Menu menu) {
         this.menu = menu;
         this.output = menu.getOutStream();
@@ -38,6 +43,9 @@ public class ServerListener extends Thread {
         System.out.println("moj nick to: "+menu.nickname);
     }
 
+    /**
+     * handles pre-game communication with server
+     */
     @Override
     public void run() {
         String message = "";
@@ -118,6 +126,9 @@ public class ServerListener extends Thread {
 
     }
 
+    /**
+     * method that waits for a move (or skip) to be made
+     */
     private void waitForMove(){
         boolean runTUDUDUDU = true;
         while(runTUDUDUDU){
@@ -142,6 +153,10 @@ public class ServerListener extends Thread {
         return board;
     }
 
+    /**
+     * handles communication with server once the game started
+     * @throws IOException
+     */
     public void startedGameService() throws IOException {
         StarBoard board = new StarBoard(boardSize);
         Platform.runLater(() -> {
@@ -196,6 +211,12 @@ public class ServerListener extends Thread {
         }
     }
 
+    /**
+     * method that checks if a player identified by the color has won on given board
+     * @param board given board
+     * @param color color that identifies a player
+     * @return
+     */
     public boolean wonByColor(StarBoard board, Color color){
         for(int i=0; i<board.getHeight(); i++){
             for(int j=0; j<board.getWidth(); j++){
@@ -206,7 +227,6 @@ public class ServerListener extends Thread {
                 }
             }
         }
-        System.out.println("you won mordo");
         return true;
     }
 }

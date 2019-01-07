@@ -7,6 +7,13 @@ import java.util.ArrayList;
 
 public class MoveChecks {
 
+    /**A method that checks if a given move is correct on a given board
+     *
+     * @param formattedMove Move to check obtained as a formatted String
+     * @param board Board to check the move on
+     * @param ifJumped boolean saying if the previous move was a jump
+     * @return true if move is correct, false otherwise
+     */
     public static int fullCheck(String formattedMove, StarBoard board, boolean ifJumped){
         String[] components = formattedMove.split("-");
         int startColumn = Integer.parseInt(components[1].split(":")[0]);
@@ -38,6 +45,14 @@ public class MoveChecks {
         return 0;
     }
 
+    /**
+     * A method that returns an array of possible moves for a given point
+     * @param column
+     * @param row
+     * @param board
+     * @param jumped a boolean telling if the piece is 'mid air'
+     * @return
+     */
     public static ArrayList<int[]> fullPossibilities(int column, int row, StarBoard board, boolean jumped){
         ArrayList<int[]> possibilities = new ArrayList<>();
         possibilities.add(leftPossibility(column, row, board, 0, jumped));

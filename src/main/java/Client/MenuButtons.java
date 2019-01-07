@@ -11,9 +11,22 @@ import java.io.*;
 import java.net.Socket;
 
 public class MenuButtons extends AbstractStage{
+
+    /**
+     * fields necessary to send signals to server's threads
+     */
     DataOutputStream out;
     String nickname;
     Socket socket;
+
+    /**
+     * constructor
+     * @param nickname of a player
+     * @param in
+     * @param out
+     * @param primaryStage
+     * @param socket
+     */
     MenuButtons(String nickname, DataInputStream in, DataOutputStream out, Stage primaryStage, Socket socket) {
         this.in =in;
         this.out=out;
@@ -30,6 +43,11 @@ public class MenuButtons extends AbstractStage{
 
     }
 
+    /**
+     * button handles the creation of game for 2 players
+     * @param primaryStage
+     * @return
+     */
     Button btnForTwoPlayers(Stage primaryStage) {
         Button btn = new Button ("2 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -42,6 +60,11 @@ public class MenuButtons extends AbstractStage{
 
     }
 
+    /**
+     * button handles the creation of game for 3 players
+     * @param primaryStage
+     * @return
+     */
     Button btnForThreePlayers(Stage primaryStage) {
         Button btn = new Button ("3 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -53,6 +76,12 @@ public class MenuButtons extends AbstractStage{
         return btn;
 
     }
+
+    /**
+     * button handles the creation of game for 4 players
+     * @param primaryStage
+     * @return
+     */
     Button btnForFourPlayers(Stage primaryStage) {
         Button btn = new Button ("4 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -64,6 +93,12 @@ public class MenuButtons extends AbstractStage{
         return btn;
 
     }
+
+    /**
+     * button handles the creation of game for 6 players
+     * @param primaryStage
+     * @return
+     */
     Button btnForSixPlayers(Stage primaryStage) {
         Button btn = new Button ("6 players");
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -75,7 +110,11 @@ public class MenuButtons extends AbstractStage{
         return btn;
 
     }
-    //TODO czy gra istnieje? IF EXISTS THEN połącz, ELSE komunikat NO_ROOM_IN_PROGRES.
+
+    /**
+     * button that handles the connection to an existing game
+     * @return
+     */
     Button btnForConnecting() {
         Button btn = new Button ("Connect to Exisiting Game");
         btn.setOnAction(new EventHandler<ActionEvent>() {
