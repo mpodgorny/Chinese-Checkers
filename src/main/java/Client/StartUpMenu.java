@@ -11,14 +11,14 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import static java.lang.Boolean.TRUE;
 
-public class StartUpMenu {
+public class StartUpMenu implements SocketControl {
 
     /**
      * User's unique nickname - uniqueness will be confirmed!
@@ -44,16 +44,17 @@ public class StartUpMenu {
         GridPane.setColumnSpan(label, 2);
         grid.getChildren().add(label);
 
-        final Label welcome_txt = new Label ("Welcome to Trylma: the Chinese Checkers.\n Please, enter your nickname and connect to the server.");
+        final Label welcome_txt = new Label ("Welcome to Trylma: the Chinese Checkers.\nPlease, enter your nickname and connect to the server.");
         GridPane.setConstraints(welcome_txt, 1, 1);
         grid.getChildren().add(welcome_txt);
-
 
         final TextField name = new TextField();
         name.setPrefColumnCount(10);
         GridPane.setConstraints(name, 1, 7);
         grid.getChildren().add(name);
+
         Scene startup = new Scene(grid, 400, 350, Color.BLACK);
+
         Button submit = new Button("Connect");
         GridPane.setConstraints(submit, 1, 10);
         grid.getChildren().add(submit);
@@ -78,7 +79,10 @@ public class StartUpMenu {
                         out.writeUTF(nickname);
 
                         if (in.readBoolean() ==TRUE) {
-                            Menu menu = new Menu(primaryStage, nickname, in, out); //w tym miejscu podłączylismy się do serwera, mamy indiwidualny in, out oraz nickname.
+                            Menu menu = new Menu(primaryStage, nickname, in, out, s);
+                            ServerListener serverListener = new ServerListener(menu);
+                            Thread t1= new Thread(serverListener);
+                            t1.start();
                         } else {
                             label.setText(nickname + " is taken! Please choose another one");
                         }
@@ -88,7 +92,7 @@ public class StartUpMenu {
 
 
                 } else {
-                    label.setText("You have not chosed nickname.");
+                    label.setText("You did not chose nickname.");
                 }
             }
         });
@@ -98,4 +102,51 @@ public class StartUpMenu {
         primaryStage.setScene(startup);
         primaryStage.show();
     }
+
+
+    //TODO: przygotowane do uporządkowania, chyba wedle zaleceń prowadzącego - za pomocą intefejsu.
+    @Override
+    public InetAddress getAddress() {
+        InetAddress ip = null; //pobranie ip hosta
+        try {
+            ip = InetAddress.getByName("localhost");
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return ip;
+    }
+
+    @Override
+    public Socket getSocket(InetAddress ip) {
+        Socket s = null;
+        try {
+            s = new Socket(ip, 2308);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    @Override
+    public DataInputStream getInputStream(Socket s) {
+        DataInputStream in = null;
+        try {
+            in = new DataInputStream(s.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return in;
+    }
+
+    @Override
+    public DataOutputStream getOutputStream(Socket s) {
+        DataOutputStream out = null;
+        try {
+            out = new DataOutputStream(s.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out;
+    }
+
 }

@@ -8,7 +8,6 @@ public class ClientMain extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         StartUpMenu start = new StartUpMenu(primaryStage);
     }
 
